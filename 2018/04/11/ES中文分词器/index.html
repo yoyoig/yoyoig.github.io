@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Yoyoig" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        ES中文分词器｜undefined
+        
+    </title>
+
+    <link rel="canonical" href="http://mingke_yan.gitee.io/myBlogs/2018/04/11/ES中文分词器/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/myBlogs/">
+                <span class="brand-logo">
+                    Yoyoig
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/myBlogs/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Tags/">Tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p5ioqsms3.bkt.clouddn.com/1123134207-34.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p5ioqsms3.bkt.clouddn.com/1123134207-34.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>ES中文分词器</h1>
+                    
+                    <span class="meta">
+                         作者 yoyoig
+                        <span>
+                          日期 2018-04-11
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/myBlogs/tags/#es-ik"
+                           title="es-ik">es-ik</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            ES中文分词器
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="中文分词器"><a href="#中文分词器" class="headerlink" title="中文分词器"></a>中文分词器</h1><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>可以将中文搜索词拆分成一个个独立的词语,而不是将中文全部拆分成一个个汉字.还可以去除词语中的停用词比如 “么,让,在,额”等这些没用意义的词语,提高搜索效率.</p>
+<h4 id="1、在elasticsearch中安装ik中文分词器"><a href="#1、在elasticsearch中安装ik中文分词器" class="headerlink" title="1、在elasticsearch中安装ik中文分词器"></a>1、在elasticsearch中安装ik中文分词器</h4><ol>
+<li>git clone <a href="https://github.com/medcl/elasticsearch-analysis-ik" target="_blank" rel="noopener">https://github.com/medcl/elasticsearch-analysis-ik</a></li>
+<li>git checkout tags/v5.2.0</li>
+<li>mvn package</li>
+<li>将target/releases/elasticsearch-analysis-ik-5.2.0.zip拷贝到es/plugins/ik目录下</li>
+<li>在es/plugins/ik下对elasticsearch-analysis-ik-5.2.0.zip进行解压缩</li>
+<li>重启es</li>
+</ol>
+<h4 id="2、ik分词器基础知识"><a href="#2、ik分词器基础知识" class="headerlink" title="2、ik分词器基础知识"></a>2、ik分词器基础知识</h4><ul>
+<li>两种analyzer，但是一般是选用ik_max_word</li>
+<li>ik_max_word: 会将文本做最细粒度的拆分，比如会将“中华人民共和国国歌”拆分为“中华人民共和国,中华人民,中华,华人,人民共和国,人民,人,民,共和国,共和,和,国国,国歌”，会穷尽各种可能的组合；</li>
+<li>ik_smart: 会做最粗粒度的拆分，比如会将“中华人民共和国国歌”拆分为“中华人民共和国,国歌”。</li>
+</ul>
+<h4 id="3、ik分词器的使用"><a href="#3、ik分词器的使用" class="headerlink" title="3、ik分词器的使用"></a>3、ik分词器的使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">PUT /my_index </span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;text&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;analyzer&quot;: &quot;ik_max_word&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">POST /my_index/my_type/_bulk</span><br><span class="line">&#123; &quot;index&quot;: &#123; &quot;_id&quot;: &quot;1&quot;&#125; &#125;</span><br><span class="line">&#123; &quot;text&quot;: &quot;男子偷上万元发红包求交女友 被抓获时仍然单身&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123; &quot;_id&quot;: &quot;2&quot;&#125; &#125;</span><br><span class="line">&#123; &quot;text&quot;: &quot;16岁少女为结婚“变”22岁 7年后想离婚被法院拒绝&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123; &quot;_id&quot;: &quot;3&quot;&#125; &#125;</span><br><span class="line">&#123; &quot;text&quot;: &quot;深圳女孩骑车逆行撞奔驰 遭索赔被吓哭(图)&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123; &quot;_id&quot;: &quot;4&quot;&#125; &#125;</span><br><span class="line">&#123; &quot;text&quot;: &quot;女人对护肤品比对男票好？网友神怼&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123; &quot;_id&quot;: &quot;5&quot;&#125; &#125;</span><br><span class="line">&#123; &quot;text&quot;: &quot;为什么国内的街道招牌用的都是红黄配？&quot; &#125;</span><br><span class="line"></span><br><span class="line">GET /my_index/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;text&quot;: &quot;男子偷上万元发红包求交女友 被抓获时仍然单身&quot;,</span><br><span class="line">  &quot;analyzer&quot;: &quot;ik_max_word&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /my_index/my_type/_search </span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;text&quot;: &quot;16岁少女结婚好还是单身好？&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4、ik配置文件"><a href="#4、ik配置文件" class="headerlink" title="4、ik配置文件"></a>4、ik配置文件</h4><p>ik配置文件地址：es/plugins/ik/config目录</p>
+<ul>
+<li>IKAnalyzer.cfg.xml：用来配置自定义词库</li>
+<li>main.dic：ik原生内置的中文词库，总共有27万多条，只要是这些单词，都会被分在一起</li>
+<li>quantifier.dic：放了一些单位相关的词</li>
+<li>suffix.dic：放了一些后缀</li>
+<li>surname.dic：中国的姓氏</li>
+<li>stopword.dic：英文停用词</li>
+</ul>
+<h5 id="ik原生最重要的两个配置文件"><a href="#ik原生最重要的两个配置文件" class="headerlink" title="ik原生最重要的两个配置文件"></a>ik原生最重要的两个配置文件</h5><ul>
+<li>main.dic：包含了原生的中文词语，会按照这个里面的词语去分词</li>
+<li>stopword.dic：包含了英文的停用词</li>
+</ul>
+<p>停用词，stopword<br>a the and at but.<br>像停用词，会在分词的时候，直接被干掉，不会建立在倒排索引中</p>
+<h5 id="自定义词库"><a href="#自定义词库" class="headerlink" title="自定义词库"></a>自定义词库</h5><ol>
+<li>自己建立词库：每年都会涌现一些特殊的流行词，网红，蓝瘦香菇，喊麦，鬼畜，一般不会在ik的原生词典里</li>
+</ol>
+<ul>
+<li>自己补充自己的最新的词语，到ik的词库里面去</li>
+<li>IKAnalyzer.cfg.xml：ext_dict，custom/mydict.dic</li>
+<li>补充自己的词语，然后需要重启es，才能生效</li>
+</ul>
+<ol start="2">
+<li>自己建立停用词库：比如了，的，啥，么，我们可能并不想去建立索引，让人家搜索<br>custom/ext_stopword.dic，已经有了常用的中文停用词，可以补充自己的停用词，然后重启es</li>
+</ol>
+<h4 id="热更新"><a href="#热更新" class="headerlink" title="热更新"></a>热更新</h4><h5 id="使用自定义词库问题"><a href="#使用自定义词库问题" class="headerlink" title="使用自定义词库问题"></a>使用自定义词库问题</h5><ul>
+<li>每次添加完，都要重启es才能生效，非常麻烦</li>
+<li>es是分布式的，可能有数百个节点，你不能每次都一个一个节点上面去修改</li>
+</ul>
+<h5 id="热更新的方案"><a href="#热更新的方案" class="headerlink" title="热更新的方案"></a>热更新的方案</h5><ul>
+<li>修改ik分词器源码，然后手动支持从mysql中每隔一定时间，自动加载新的词库</li>
+<li>基于ik分词器原生支持的热更新方案，部署一个web服务器，提供一个http接口，通过modified和tag两个http响应头，来提供词语的热更新</li>
+</ul>
+<h5 id="热更新-1"><a href="#热更新-1" class="headerlink" title="热更新"></a>热更新</h5><ol>
+<li>下载源码</li>
+</ol>
+<p><a href="https://github.com/medcl/elasticsearch-analysis-ik/tree/v5.2.0" target="_blank" rel="noopener">https://github.com/medcl/elasticsearch-analysis-ik/tree/v5.2.0</a></p>
+<p>ik分词器，是个标准的java maven工程，直接导入eclipse就可以看到源码</p>
+<ol start="2">
+<li>修改源码</li>
+</ol>
+<ul>
+<li>Dictionary类，169行：Dictionary单例类的初始化方法，在这里需要创建一个我们自定义的线程，并且启动它</li>
+<li>HotDictReloadThread类：就是死循环，不断调用Dictionary.getSingleton().reLoadMainDict()，去重新加载词典</li>
+<li>Dictionary类，389行：this.loadMySQLExtDict();</li>
+<li>Dictionary类，683行：this.loadMySQLStopwordDict();</li>
+<li>mvn package打包代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target\releases\elasticsearch-analysis-ik-5.2.0.zip</span><br></pre></td></tr></table></figure>
+<ul>
+<li>将zip包解压到es/plugin/ik下,同时添加mysql连接jar包,重启即可</li>
+</ul>
+<p><strong><em>区别:自定义词库文件,需要每次重启才有效.<br>使用mysql,可以动态的将热词同步到es内存中.更方便管理.</em></strong></p>
+<h2 id="遇到的坑"><a href="#遇到的坑" class="headerlink" title="遇到的坑"></a>遇到的坑</h2><h3 id="一-维护词典后-查不到数据"><a href="#一-维护词典后-查不到数据" class="headerlink" title="一.维护词典后,查不到数据"></a>一.维护词典后,查不到数据</h3><ul>
+<li>在存入数据时,会将数据按照指定的分词器分词,建立倒排索引.</li>
+<li>在查询时,会将查询的数据,安装分词器拆分.</li>
+<li>按照查询拆分的词,去倒排索引查询.</li>
+<li>当先有数据,之后维护词典时,会导致按照分词器拆分的词,在倒排索引中到不到数据的问题.</li>
+<li>需要重新put一下数据,重新建立倒排索引,才能解决.</li>
+</ul>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/myBlogs/2018/04/11/修改Mapping/" data-toggle="tooltip" data-placement="top"
+                           title="ES修改Mapping">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中文分词器"><span class="toc-text">中文分词器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、在elasticsearch中安装ik中文分词器"><span class="toc-text">1、在elasticsearch中安装ik中文分词器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、ik分词器基础知识"><span class="toc-text">2、ik分词器基础知识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、ik分词器的使用"><span class="toc-text">3、ik分词器的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、ik配置文件"><span class="toc-text">4、ik配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ik原生最重要的两个配置文件"><span class="toc-text">ik原生最重要的两个配置文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#自定义词库"><span class="toc-text">自定义词库</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#热更新"><span class="toc-text">热更新</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#使用自定义词库问题"><span class="toc-text">使用自定义词库问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#热更新的方案"><span class="toc-text">热更新的方案</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#热更新-1"><span class="toc-text">热更新</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遇到的坑"><span class="toc-text">遇到的坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一-维护词典后-查不到数据"><span class="toc-text">一.维护词典后,查不到数据</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="http://wangxuanbo.gitee.io/blog/">波波&#39;s blog</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Yoyoig 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/myBlogs/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/myBlogs/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/myBlogs/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://mingke_yan.gitee.io/myBlogs/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p5ioqsms3.bkt.clouddn.com/avtor.jpg">
+</body>
+
+</html>
