@@ -80,7 +80,7 @@
                         
 							
                         <li>
-                            <a href="/myBlogs/About/">关于</a>
+                            <a href="/myBlogs/Archive/">归档</a>
                         </li>
 							
 						
@@ -88,7 +88,7 @@
                         
 							
                         <li>
-                            <a href="/myBlogs/Archive/">归档</a>
+                            <a href="/myBlogs/About/">关于</a>
                         </li>
 							
 						
@@ -220,6 +220,7 @@
 <li>surname.dic：中国的姓氏</li>
 <li>stopword.dic：英文停用词</li>
 </ul>
+<p><strong><em>踩到的坑</em></strong>:本人用的5.5.1版本ES和ik.发现ik并没有自动将surname.dic导入到词库中,导致查询时精确率不够.同时也没有导入中文停用词.<br>我们需要自己手动将surname.dic以及extra_stopword.dic配置到IKAnalyzer.cfg.xml中.</p>
 <h5 id="ik原生最重要的两个配置文件"><a href="#ik原生最重要的两个配置文件" class="headerlink" title="ik原生最重要的两个配置文件"></a>ik原生最重要的两个配置文件</h5><ul>
 <li>main.dic：包含了原生的中文词语，会按照这个里面的词语去分词</li>
 <li>stopword.dic：包含了英文的停用词</li>
@@ -253,11 +254,26 @@
 <li>修改源码</li>
 </ol>
 <ul>
-<li>Dictionary类，169行：Dictionary单例类的初始化方法，在这里需要创建一个我们自定义的线程，并且启动它</li>
-<li>HotDictReloadThread类：就是死循环，不断调用Dictionary.getSingleton().reLoadMainDict()，去重新加载词典</li>
-<li>Dictionary类，389行：this.loadMySQLExtDict();</li>
-<li>Dictionary类，683行：this.loadMySQLStopwordDict();</li>
-<li>mvn package打包代码</li>
+<li><p>JDBC配置文件,放在ik文件夹的config文件下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jdbc.url=jdbc:mysql://xxxx:3306/xxxx</span><br><span class="line">jdbc.user=</span><br><span class="line">jdbc.password=</span><br><span class="line">jdbc.reload.sql=</span><br><span class="line">jdbc.reload.interval=10000  # 冲数据库读取热词间隔时间</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从mysql中读取热词并写入到ES内存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 从mysql加载热更新词典</span><br><span class="line"> */</span><br><span class="line">private void loadMySQLExtDict() &#123;</span><br><span class="line">	Connection conn = null;</span><br><span class="line">	Statement stmt = null;</span><br><span class="line">	ResultSet rs = null;</span><br><span class="line"></span><br><span class="line">	try &#123;</span><br><span class="line">		Path file = PathUtils.get(getDictRoot(), &quot;jdbc-reload.properties&quot;);</span><br><span class="line">		prop.load(new FileInputStream(file.toFile()));</span><br><span class="line"></span><br><span class="line">		logger.info(&quot;[==========]jdbc-reload.properties&quot;);</span><br><span class="line">		for(Object key : prop.keySet()) &#123;</span><br><span class="line">			logger.info(&quot;[==========]&quot; + key + &quot;=&quot; + prop.getProperty(String.valueOf(key)));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		logger.info(&quot;[==========]query hot dict from mysql, &quot; + prop.getProperty(&quot;jdbc.reload.sql&quot;) + &quot;......&quot;);</span><br><span class="line"></span><br><span class="line">		conn = DriverManager.getConnection(</span><br><span class="line">				prop.getProperty(&quot;jdbc.url&quot;),</span><br><span class="line">				prop.getProperty(&quot;jdbc.user&quot;),</span><br><span class="line">				prop.getProperty(&quot;jdbc.password&quot;));</span><br><span class="line">		stmt = conn.createStatement();</span><br><span class="line">		rs = stmt.executeQuery(prop.getProperty(&quot;jdbc.reload.sql&quot;));</span><br><span class="line"></span><br><span class="line">		while(rs.next()) &#123;</span><br><span class="line">			String theWord = rs.getString(&quot;word&quot;);</span><br><span class="line">			logger.info(&quot;[==========]hot word from mysql: &quot; + theWord);</span><br><span class="line">			if (theWord!=null &amp;&amp; !&quot;&quot;.equals(theWord))&#123;</span><br><span class="line">				_MainDict.fillSegment(theWord.trim().toCharArray());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		Thread.sleep(Integer.valueOf(String.valueOf(prop.get(&quot;jdbc.reload.interval&quot;))));</span><br><span class="line">	&#125; catch (Exception e) &#123;</span><br><span class="line">		logger.error(&quot;erorr&quot;, e);</span><br><span class="line">	&#125; finally &#123;</span><br><span class="line">		if(rs != null) &#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				rs.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				logger.error(&quot;error&quot;, e);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if(stmt != null) &#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				stmt.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				logger.error(&quot;error&quot;, e);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if(conn != null) &#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				conn.close();</span><br><span class="line">			&#125; catch (SQLException e) &#123;</span><br><span class="line">				logger.error(&quot;error&quot;, e);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Dictionary类中主要通过该方法加载词典,我们将Mysql加载词典的方法放在该方法中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 加载主词典及扩展词典</span><br><span class="line"> */</span><br><span class="line">private void loadMainDict() &#123;</span><br><span class="line">	// 建立一个主词典实例</span><br><span class="line">	_MainDict = new DictSegment((char) 0);</span><br><span class="line"></span><br><span class="line">	// 读取主词典文件</span><br><span class="line">	Path file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_MAIN);</span><br><span class="line"></span><br><span class="line">	InputStream is = null;</span><br><span class="line">	try &#123;</span><br><span class="line">		is = new FileInputStream(file.toFile());</span><br><span class="line">	&#125; catch (FileNotFoundException e) &#123;</span><br><span class="line">		logger.error(e.getMessage(), e);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	try &#123;</span><br><span class="line">		BufferedReader br = new BufferedReader(new InputStreamReader(is, &quot;UTF-8&quot;), 512);</span><br><span class="line">		String theWord = null;</span><br><span class="line">		do &#123;</span><br><span class="line">			theWord = br.readLine();</span><br><span class="line">			if (theWord != null &amp;&amp; !&quot;&quot;.equals(theWord.trim())) &#123;</span><br><span class="line">				_MainDict.fillSegment(theWord.trim().toCharArray());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; while (theWord != null);</span><br><span class="line"></span><br><span class="line">	&#125; catch (IOException e) &#123;</span><br><span class="line">		logger.error(&quot;ik-analyzer&quot;, e);</span><br><span class="line"></span><br><span class="line">	&#125; finally &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			if (is != null) &#123;</span><br><span class="line">				is.close();</span><br><span class="line">				is = null;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			logger.error(&quot;ik-analyzer&quot;, e);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	// 加载扩展词典</span><br><span class="line">	this.loadExtDict();</span><br><span class="line">	// 加载远程自定义词库</span><br><span class="line">	this.loadRemoteExtDict();</span><br><span class="line">	//  我们的方法:从mysql加载词典</span><br><span class="line">	this.loadMySQLExtDict();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Dictionary类，重新加载词典方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public void reLoadMainDict() &#123;</span><br><span class="line">	logger.info(&quot;重新加载词典...&quot;);</span><br><span class="line">	// 新开一个实例加载词典，减少加载过程对当前词典使用的影响</span><br><span class="line">	Dictionary tmpDict = new Dictionary(configuration);</span><br><span class="line">	tmpDict.configuration = getSingleton().configuration;</span><br><span class="line">	// 调用的上面的方法</span><br><span class="line">	tmpDict.loadMainDict();</span><br><span class="line">	tmpDict.loadStopWordDict();</span><br><span class="line">	_MainDict = tmpDict._MainDict;</span><br><span class="line">	_StopWords = tmpDict._StopWords;</span><br><span class="line">	logger.info(&quot;重新加载词典完毕...&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HotDictReloadThread类：就是死循环，不断调用Dictionary.getSingleton().reLoadMainDict()，去重新加载词典</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class HotDictReloadThread implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">	private static final Logger logger = ESLoggerFactory.getLogger(HotDictReloadThread.class.getName());</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		while(true) &#123;</span><br><span class="line">			logger.info(&quot;[==========]reload hot dict from mysql......&quot;);   </span><br><span class="line">			Dictionary.getSingleton().reLoadMainDict();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Dictionary类中,启动线程不停的从Mysql中加载词库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public static synchronized Dictionary initial(Configuration cfg) &#123;</span><br><span class="line">    if (singleton == null) &#123;</span><br><span class="line">    	synchronized (Dictionary.class) &#123;</span><br><span class="line">    		if (singleton == null) &#123;</span><br><span class="line">            // IK分词器在初始化时,自动加载默认词典xxx.dic</span><br><span class="line">    		singleton = new Dictionary(cfg);</span><br><span class="line">    		singleton.loadMainDict();</span><br><span class="line">    		singleton.loadSurnameDict();</span><br><span class="line">    		singleton.loadQuantifierDict();</span><br><span class="line">    		singleton.loadSuffixDict();</span><br><span class="line">    		singleton.loadPrepDict();</span><br><span class="line">    		singleton.loadStopWordDict();</span><br><span class="line">            </span><br><span class="line">            // 我们的代码:创建线程对象并启动</span><br><span class="line">    		new Thread(new HotDictReloadThread()).start();</span><br><span class="line">    </span><br><span class="line">    		if(cfg.isEnableRemoteDict())&#123;</span><br><span class="line">    			// 建立监控线程</span><br><span class="line">    			for (String location : singleton.getRemoteExtDictionarys()) &#123;</span><br><span class="line">    				// 10 秒是初始延迟可以修改的 60是间隔时间 单位秒</span><br><span class="line">    				pool.scheduleAtFixedRate(new Monitor(location), 10, 60, TimeUnit.SECONDS);</span><br><span class="line">    			&#125;</span><br><span class="line">    			for (String location : singleton.getRemoteExtStopWordDictionarys()) &#123;</span><br><span class="line">    				pool.scheduleAtFixedRate(new Monitor(location), 10, 60, TimeUnit.SECONDS);</span><br><span class="line">    			&#125;</span><br><span class="line">    		&#125;</span><br><span class="line">    </span><br><span class="line">    		return singleton;</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return singleton;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>mvn package打包代码</p>
+</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target\releases\elasticsearch-analysis-ik-5.2.0.zip</span><br></pre></td></tr></table></figure>
 <ul>
@@ -266,8 +282,8 @@
 <p><strong><em>区别:自定义词库文件,需要每次重启才有效.<br>使用mysql,可以动态的将热词同步到es内存中.更方便管理.</em></strong></p>
 <h2 id="遇到的坑"><a href="#遇到的坑" class="headerlink" title="遇到的坑"></a>遇到的坑</h2><h3 id="一-维护词典后-查不到数据"><a href="#一-维护词典后-查不到数据" class="headerlink" title="一.维护词典后,查不到数据"></a>一.维护词典后,查不到数据</h3><ul>
 <li>在存入数据时,会将数据按照指定的分词器分词,建立倒排索引.</li>
-<li>在查询时,会将查询的数据,安装分词器拆分.</li>
-<li>按照查询拆分的词,去倒排索引查询.</li>
+<li>在查询时,会将查询的数据,按照分词器词库拆分.</li>
+<li>再按照查询拆分的词,去倒排索引查询.</li>
 <li>当先有数据,之后维护词典时,会导致按照分词器拆分的词,在倒排索引中到不到数据的问题.</li>
 <li>需要重新put一下数据,重新建立倒排索引,才能解决.</li>
 </ul>
@@ -276,6 +292,11 @@
                 
 
                 <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/myBlogs/2018/04/19/初识搜索引擎/" data-toggle="tooltip" data-placement="top"
+                           title="初识搜索引擎">&larr; Previous Post</a>
+                    </li>
                     
                     
                     <li class="next">
@@ -315,57 +336,54 @@
                 <!-- City版安装代码已完成 -->
                 
 
-            </div>
-
-            <div class="hidden-xs col-sm-3 toc-col">
-                <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中文分词器"><span class="toc-text">中文分词器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、在elasticsearch中安装ik中文分词器"><span class="toc-text">1、在elasticsearch中安装ik中文分词器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、ik分词器基础知识"><span class="toc-text">2、ik分词器基础知识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、ik分词器的使用"><span class="toc-text">3、ik分词器的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、ik配置文件"><span class="toc-text">4、ik配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ik原生最重要的两个配置文件"><span class="toc-text">ik原生最重要的两个配置文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#自定义词库"><span class="toc-text">自定义词库</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#热更新"><span class="toc-text">热更新</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#使用自定义词库问题"><span class="toc-text">使用自定义词库问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#热更新的方案"><span class="toc-text">热更新的方案</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#热更新-1"><span class="toc-text">热更新</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遇到的坑"><span class="toc-text">遇到的坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一-维护词典后-查不到数据"><span class="toc-text">一.维护词典后,查不到数据</span></a></li></ol></li></ol></li></ol>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Sidebar Container -->
-
-            <div class="
+                <div class="
                 col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
                 sidebar-container">
 
-                <!-- Featured Tags -->
-                
-                <section>
-                    <!-- no hr -->
-                    <h5 class="text-center">
-                        <a href="/myBlogs/tags/">FEATURED TAGS</a>
-                    </h5>
-                    <div class="tags">
-                        
-                        <a class="tag" href="/myBlogs/Tags/#es-ik"
-                           title="es-ik">es-ik</a>
-                        
-                        <a class="tag" href="/myBlogs/Tags/#elasticsearch"
-                           title="elasticsearch">elasticsearch</a>
-                        
-                    </div>
-                </section>
-                
+                    <!-- Featured Tags -->
+                    
+                    <section>
+                        <!-- no hr -->
+                        <h5 class="text-center">
+                            <a href="/myBlogs/tags/">FEATURED TAGS</a>
+                        </h5>
+                        <div class="tags">
+                            
+                            <a class="tag" href="/myBlogs/Tags/#es-ik"
+                               title="es-ik">es-ik</a>
+                            
+                            <a class="tag" href="/myBlogs/Tags/#elasticsearch"
+                               title="elasticsearch">elasticsearch</a>
+                            
+                        </div>
+                    </section>
+                    
 
-                <!-- Friends Blog -->
-                
-                <div style="margin-top: 20px;">
-                    <h5 class="text-center">FRIENDS</h5>
-                    <ul class="list-inline text-center">
-                        
-                        <li><a href="http://wangxuanbo.gitee.io/blog/">波波&#39;s blog</a></li>
-                        
-                        <li><a href="https://home.cnblogs.com/u/chiangchou/">chiangchou</a></li>
-                        
-                        <li><a href="https://home.cnblogs.com/u/jiaqingshareing/">jiaqing</a></li>
-                        
-                    </ul>
+                    <!-- Friends Blog -->
+                    
+                    <div style="margin-top: 20px;">
+                        <h5 class="text-center">FRIENDS</h5>
+                        <ul class="list-inline text-center">
+                            
+                            <li><a href="http://wangxuanbo.gitee.io/blog/">波波&#39;s blog</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/chiangchou/">chiangchou</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/jiaqingshareing/">jiaqing</a></li>
+                            
+                        </ul>
+                    </div>
+                    
                 </div>
-                
+
+            </div>
+
+            <!--目录-->
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中文分词器"><span class="toc-text">中文分词器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、在elasticsearch中安装ik中文分词器"><span class="toc-text">1、在elasticsearch中安装ik中文分词器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、ik分词器基础知识"><span class="toc-text">2、ik分词器基础知识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、ik分词器的使用"><span class="toc-text">3、ik分词器的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、ik配置文件"><span class="toc-text">4、ik配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ik原生最重要的两个配置文件"><span class="toc-text">ik原生最重要的两个配置文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#自定义词库"><span class="toc-text">自定义词库</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#热更新"><span class="toc-text">热更新</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#使用自定义词库问题"><span class="toc-text">使用自定义词库问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#热更新的方案"><span class="toc-text">热更新的方案</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#热更新-1"><span class="toc-text">热更新</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遇到的坑"><span class="toc-text">遇到的坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一-维护词典后-查不到数据"><span class="toc-text">一.维护词典后,查不到数据</span></a></li></ol></li></ol></li></ol>
+                </div>
             </div>
         </div>
 
