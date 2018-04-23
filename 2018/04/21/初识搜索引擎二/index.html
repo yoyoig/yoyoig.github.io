@@ -88,7 +88,7 @@
                         
 							
                         <li>
-                            <a href="/myBlogs/Tags/">标签</a>
+                            <a href="/myBlogs/Archive/">归档</a>
                         </li>
 							
 						
@@ -96,7 +96,7 @@
                         
 							
                         <li>
-                            <a href="/myBlogs/Archive/">归档</a>
+                            <a href="/myBlogs/Tags/">标签</a>
                         </li>
 							
 						
@@ -460,8 +460,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">PUT /website </span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;article&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;title&quot;: &#123;</span><br><span class="line">          // 分词,用来搜索</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;fields&quot;: &#123;</span><br><span class="line">            // 不分词,用来排序</span><br><span class="line">            &quot;raw&quot;: &#123;</span><br><span class="line">              &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">              // 不使用分词器</span><br><span class="line">              &quot;index&quot;: &quot;not_analyzed&quot;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;,</span><br><span class="line">          // 建立正排索引进行排序</span><br><span class="line">          &quot;fielddata&quot;: true</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /website/article/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;sort&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      // 使用不分词的title进行排序</span><br><span class="line">      &quot;title.raw&quot;: &#123;</span><br><span class="line">        &quot;order&quot;: &quot;desc&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="7-正排索引"><a href="#7-正排索引" class="headerlink" title="7.正排索引"></a>7.正排索引</h3><ol>
-<li><p>正排索引</p>
-<blockquote>
+<li>正排索引<blockquote>
 <p>正排索引即doc values</p>
 <ul>
 <li>对于如下两个doc<blockquote>
@@ -469,9 +468,34 @@
 </blockquote>
 </li>
 </ul>
-<p>建立正排索引:<br>document | name | age<br>—|—|—<br>doc1 | jack | 27<br>doc2| tom | 30</p>
 </blockquote>
 </li>
+</ol>
+<blockquote>
+<p>建立正排索引:</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>document</th>
+<th>name</th>
+<th>age</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> doc1</td>
+<td>jack</td>
+<td>27</td>
+</tr>
+<tr>
+<td> doc2</td>
+<td>tom</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
 <li><p>正排索引的作用</p>
 <blockquote>
 <p>通过正排索引可以进行排序、聚合、过滤等操作</p>
