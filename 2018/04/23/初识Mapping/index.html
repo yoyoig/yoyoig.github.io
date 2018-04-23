@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Yoyoig" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        初识Mapping｜undefined
+        
+    </title>
+
+    <link rel="canonical" href="http://mingke_yan.gitee.io/myBlogs/2018/04/23/初识Mapping/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/myBlogs/">
+                <span class="brand-logo">
+                    Yoyoig
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/myBlogs/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/About/">关于</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Tags/">标签</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Archive/">归档</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p5ioqsms3.bkt.clouddn.com/20180423182952.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p5ioqsms3.bkt.clouddn.com/20180423182952.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>初识Mapping</h1>
+                    
+                    <span class="meta">
+                         作者 yoyoig
+                        <span>
+                          日期 2018-04-23
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/myBlogs/Tags/#elasticsearch"
+                           title="elasticsearch">elasticsearch</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            初识Mapping
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="初识Mapping"><a href="#初识Mapping" class="headerlink" title="初识Mapping"></a>初识Mapping</h1><h3 id="1-什么是mapping"><a href="#1-什么是mapping" class="headerlink" title="1.什么是mapping"></a>1.什么是mapping</h3><ul>
+<li>往es里面直接插入数据，es会自动建立索引，同时建立type以及对应的mapping</li>
+<li>自动建立的mapping即为dynamic mapping</li>
+</ul>
+<blockquote>
+<p>mapping，就是index的type的元数据，每个type都有一个自己的mapping，决定了数据类型，建立倒排索引的行为，还有进行搜索的行为</p>
+</blockquote>
+<h3 id="2-mapping的数据类型"><a href="#2-mapping的数据类型" class="headerlink" title="2.mapping的数据类型"></a>2.mapping的数据类型</h3><ul>
+<li>string</li>
+<li>byte，short，integer，long</li>
+<li>float，double</li>
+<li>boolean</li>
+<li>date</li>
+</ul>
+<blockquote>
+<p>dynamic mapping数据类型映射</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>value</th>
+<th>type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>true or false</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>123</td>
+<td>long</td>
+</tr>
+<tr>
+<td>123.45</td>
+<td>double</td>
+</tr>
+<tr>
+<td>2017-01-01</td>
+<td>date</td>
+</tr>
+<tr>
+<td>“hello world”</td>
+<td>string/text</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>查看index的mapping数据类型语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /index/_mapping/type</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="3-手动建立Mapping"><a href="#3-手动建立Mapping" class="headerlink" title="3.手动建立Mapping"></a>3.手动建立Mapping</h3><ul>
+<li>在建立index时建立mapping</li>
+<li>mapping建立后不能修改<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">PUT /website</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    // type</span><br><span class="line">    &quot;article&quot;: &#123;</span><br><span class="line">      // type下的字段</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;author_id&quot;: &#123;</span><br><span class="line">          // 字段类型</span><br><span class="line">          &quot;type&quot;: &quot;long&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;title&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          // 分词器</span><br><span class="line">          &quot;analyzer&quot;: &quot;english&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;content&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;post_date&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;date&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;publisher_id&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;index&quot;: &quot;not_analyzed&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>在我们指定分词时,使用字段<code>index</code> 属性控制string如何被索引,对于string类型的filed index 默认值是： analyzed.然后在<code>analyzer</code>中指定分词器.</p>
+<ul>
+<li>analyzed 使用分词器</li>
+<li>not_analyzed 不分词,作为exact value放到倒排索引中</li>
+<li>no 不放到倒排索引中</li>
+</ul>
+</blockquote>
+<h3 id="4-复杂的mapping数据类型"><a href="#4-复杂的mapping数据类型" class="headerlink" title="4.复杂的mapping数据类型"></a>4.复杂的mapping数据类型</h3><ul>
+<li>multivalue field 数组类型<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123; &quot;tags&quot;: [ &quot;tag1&quot;, &quot;tag2&quot; ]&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>建立索引时与string是一样的，数组数据类型必须统一</p>
+</blockquote>
+<ul>
+<li><p>empty field 空类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">null，[]，[null]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>object field 对象类型</p>
+<blockquote>
+<p>address：object类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&quot;mappings&quot;: &#123;</span><br><span class="line">  &quot;employee&quot;: &#123;</span><br><span class="line">    &quot;properties&quot;: &#123;</span><br><span class="line">      &quot;address&quot;: &#123;</span><br><span class="line">        &quot;properties&quot;: &#123;</span><br><span class="line">          &quot;city&quot;: &#123;</span><br><span class="line">            &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">            &quot;fields&quot;: &#123;</span><br><span class="line">              &quot;keyword&quot;: &#123;</span><br><span class="line">                &quot;type&quot;: &quot;keyword&quot;,</span><br><span class="line">                &quot;ignore_above&quot;: 256</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>properties下还有一层properties即为object类型.</p>
+</blockquote>
+<ul>
+<li>object类型底层存储方式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 单个object类型</span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;:            [jack],</span><br><span class="line">    &quot;age&quot;:          [27],</span><br><span class="line">    &quot;join_date&quot;:      [2017-01-01],</span><br><span class="line">    &quot;address.country&quot;:         [china],</span><br><span class="line">    &quot;address.province&quot;:   [guangdong],</span><br><span class="line">    &quot;address.city&quot;:  [guangzhou]</span><br><span class="line">&#125;</span><br><span class="line">// 数组object类型</span><br><span class="line">&#123;</span><br><span class="line">    &quot;authors&quot;: [</span><br><span class="line">        &#123; &quot;age&quot;: 26, &quot;name&quot;: &quot;Jack White&quot;&#125;,</span><br><span class="line">        &#123; &quot;age&quot;: 55, &quot;name&quot;: &quot;Tom Jones&quot;&#125;,</span><br><span class="line">        &#123; &quot;age&quot;: 39, &quot;name&quot;: &quot;Kitty Smith&quot;&#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="5-定制dynamic-mapping策略"><a href="#5-定制dynamic-mapping策略" class="headerlink" title="5.定制dynamic mapping策略"></a>5.定制dynamic mapping策略</h3><ul>
+<li>定制dynamic策略<blockquote>
+<ul>
+<li>true: 遇到新字段,默认进行dynamic mapping</li>
+<li>false: 忽略新字段</li>
+<li>strict: 遇到新字段则报错</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">PUT /my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      // 对全局type不能新增字段</span><br><span class="line">      &quot;dynamic&quot;: &quot;strict&quot;,</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;title&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;address&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;object&quot;,</span><br><span class="line">          // address可以新增字段默认dynamic</span><br><span class="line">          &quot;dynamic&quot;: &quot;true&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>定制dynamic mapping策略<blockquote>
+<p><code>date_detection</code></p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>对于<code>yyyy-MM-dd</code>格式的值,该字段会被自动<code>dynamic mapping</code>成<code>date</code>,若之后存放<code>&quot;hello world&quot;</code>,则会报错.</p>
+</blockquote>
+<p>取消<code>date</code>的<code>dynamic mapping</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT /my_index/_mapping/my_type</span><br><span class="line">&#123;</span><br><span class="line">    &quot;date_detection&quot;: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们可以手动关闭某个<code>type</code>的<code>date_detection</code>. 也可以自己手动指定某个<code>field</code>为<code>date</code>类型</p>
+<p>示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">PUT /my_index</span><br><span class="line">&#123;</span><br><span class="line">    &quot;mappings&quot;: &#123;</span><br><span class="line">        &quot;my_type&quot;: &#123;</span><br><span class="line">            // 定制模板</span><br><span class="line">            &quot;dynamic_templates&quot;: [</span><br><span class="line">                &#123; </span><br><span class="line">                    &quot;en&quot;: &#123;</span><br><span class="line">                          &quot;match&quot;:&quot;*_en&quot;, </span><br><span class="line">                          &quot;match_mapping_type&quot;:&quot;string&quot;,</span><br><span class="line">                          &quot;mapping&quot;: &#123;</span><br><span class="line">                              &quot;type&quot;:           &quot;string&quot;,</span><br><span class="line">                              &quot;analyzer&quot;:       &quot;english&quot;</span><br><span class="line">                          &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>匹配到以<code>_en</code>结尾的数据,映射为string类型,并使用english分词器分词.</p>
+</blockquote>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/myBlogs/2018/04/21/初识搜索引擎二/" data-toggle="tooltip" data-placement="top"
+                           title="初识搜索引擎二">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!--友言评论框-->
+                
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNTY3MS8xMjIwNw==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+
+                <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                    <!-- Featured Tags -->
+                    
+                    <section>
+                        <!-- no hr -->
+                        <h5 class="text-center">
+                            <a href="/myBlogs/tags/">FEATURED TAGS</a>
+                        </h5>
+                        <div class="tags">
+                            
+                            <a class="tag" href="/myBlogs/Tags/#elasticsearch"
+                               title="elasticsearch">elasticsearch</a>
+                            
+                        </div>
+                    </section>
+                    
+
+                    <!-- Friends Blog -->
+                    
+                    <div style="margin-top: 20px;">
+                        <h5 class="text-center">FRIENDS</h5>
+                        <ul class="list-inline text-center">
+                            
+                            <li><a href="http://wangxuanbo.gitee.io/blog/">波波&#39;s blog</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/chiangchou/">chiangchou</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/jiaqingshareing/">jiaqing</a></li>
+                            
+                            <li><a href="http://xiezixi.gitee.io/blog/">西瓜皮&#39;s blog</a></li>
+                            
+                        </ul>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <!--目录-->
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初识Mapping"><span class="toc-text">初识Mapping</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-什么是mapping"><span class="toc-text">1.什么是mapping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-mapping的数据类型"><span class="toc-text">2.mapping的数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-手动建立Mapping"><span class="toc-text">3.手动建立Mapping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-复杂的mapping数据类型"><span class="toc-text">4.复杂的mapping数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-定制dynamic-mapping策略"><span class="toc-text">5.定制dynamic mapping策略</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Yoyoig 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/myBlogs/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/myBlogs/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/myBlogs/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://mingke_yan.gitee.io/myBlogs/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p5ioqsms3.bkt.clouddn.com/avtor.jpg">
+</body>
+
+</html>
