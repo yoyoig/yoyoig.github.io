@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        标签｜undefined
+        
         
     </title>
 
-    <link rel="canonical" href="http://mingke_yan.gitee.io/myBlogs/Tags/">
+    <link rel="canonical" href="http://mingke_yan.gitee.io/myBlogs/page/2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/myBlogs/css/bootstrap.min.css">
@@ -44,7 +44,7 @@
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
-" data-ishome = "false" >
+" data-ishome = "true" >
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -139,207 +139,301 @@
 </script>
 
 <!-- Main Content -->
+
+
 <style>
-    .intro-header .site-heading {
-        margin: 50px;
+
+    .custom-haojen-container .post-preview:nth-of-type(1),
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
+        text-align: center;
+        background-repeat: no-repeat;
+        border-radius: 3px;
+        background-size: cover;
+        padding: 0;
+        height: 300px;
+        display: table;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.16);
     }
-    
-    header.intro-header {
-        background-image: url('http://p5ioqsms3.bkt.clouddn.com/tags.jpg')
+
+    /*去掉诗歌的背景图片*/
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
+        background-image: none !important;
+        background-color: rgba(255, 248, 220, 0.5);
     }
-    
+
+    .custom-haojen-container .post-preview:nth-child(1) h2,
+    .custom-haojen-container .post-preview:nth-child(1) .post-meta,
+    .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+        text-shadow: 0 0 40px rgba(0, 0, 0, 1);
+        letter-spacing: 1px;
+        color: #fff;
+        margin-top: 0;
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+
+    .custom-haojen-container .post-preview:nth-child(1) .post-meta {
+        font-size: .9em;
+        font-weight: 300;
+        margin-top: 0;
+    }
+
+    .custom-haojen-container .post-preview-poetry:nth-child(1) .post-subtitle {
+        letter-spacing: 6px;
+        font-size: 18px;
+        font-family: unset;
+        font-weight: 400;
+        color: rgba(0, 0, 0, .75)
+    }
+
+    /*不显示摘要*/
+    .custom-haojen-container .post-preview:nth-child(1) .post-content-preview {
+        display: none
+    }
+
+    /*只第一个显示背景图片*/
+    .custom-haojen-container .post-preview:not(:nth-child(1)) {
+        background-image: none !important;
+    }
+
+    /*第一个分界线去掉*/
+    .custom-haojen-container hr:nth-of-type(1) {
+        display: none;
+    }
+
+    /*主题*/
+    .custom-haojen-container .post-preview:nth-of-type(1) > a {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    /*诗词标题*/
+    .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+        font-size: 35px;
+        font-family: STKaiti;
+        color: rgba(0, 0, 0, .8);
+    }
+
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) .post-meta {
+        color: #0e2231;
+    }
+
+    @media (max-width: 768px) {
+        .custom-haojen-container .post-preview:nth-child(1) {
+            height: 240px;
+        }
+
+        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+            font-size: 28px !important;
+            margin-top: 0;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .custom-haojen-container .post-preview:nth-of-type(1) > a {
+            padding: 20px
+        }
+    }
+
+    /*手机屏幕*/
+    @media (max-width: 400px) {
+        .custom-haojen-container .post-preview:nth-child(1) {
+            height: 195px;
+        }
+
+        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+            font-size: 20px !important;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+            font-size: 16px;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) a {
+            padding: 30px 20px;
+        }
+    }
 </style>
 
 <!-- Page Header -->
-<header class="intro-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading text-center">
-                    <h1>标签</h1>
-                    <span class="subheading">在这里你可以根据标签，快速检索文章</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Main Content -->
-<div class="container">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 visible-xs-block visible-sm-block">
     <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <!-- 标签云 -->
-            <div id='tag_cloud' class="tags">
-                
-                <a href="#es-ik" title="es-ik" rel="1">es-ik</a>
-                
-                <a href="#elasticsearch" title="elasticsearch" rel="8">elasticsearch</a>
-                
-                <a href="#spring boot" title="spring boot" rel="2">spring boot</a>
-                
-                <a href="#Java" title="Java" rel="2">Java</a>
-                
+        <header class="intro-header">
+            <div class="container" style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/20180425.jpg');background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;">
+            <div class="site-heading text-center">
+                    <div class="about-me">
+                        <!--移动端头部显示-->
+                        <img src="http://p5ioqsms3.bkt.clouddn.com/avtor.jpg"/>
+                        <h5><a href="/myBlogs/about/">yoyoig</a></h5>
+                        <p>一个菜鸟的征程</p>
+                    </div>
+                </div>
             </div>
+        </header>
+    </div>
+</div>
+<!-- Main Content -->
+<div class="container custom-haojen-container">
+    <!-- Post Container -->
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
+            <!-- Main Content -->
 
-            <!-- 标签列表 -->
+
+
+<!--首页POST内容-->
+<div class="post-preview "
+     style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/e824b899a9014c081cb1b4a2097b02087bf4f42b.jpg')">
+    <a href="/myBlogs/2018/04/11/hello-world/">
+        <h2 class="post-title">
+            Hello World
+        </h2>
+        <p class="post-meta">
+            <!--日期-->
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-04-11
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer i..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<!-- 翻页 pager -->
+
+<ul class="pager">
+    
+    <li class="previous">
+        <a href="/myBlogs/">&larr; Newer Posts</a>
+    </li>
+    
+    
+</ul>
+
+
+        </div>
+        <!-- Sidebar Container -->
+        <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+
+            <!-- About Me -->
+            <section class="visible-md visible-lg" style="padding: 0 18px">
+                <div class="short-about">
+                    <!--侧边栏头像-->
+                    
+                    <img src="http://p5ioqsms3.bkt.clouddn.com/avtor.jpg"/>
+                    
+                    <h5><a href="/myBlogs/about/">yoyoig</a></h5>
+                    
+                    <p>一个菜鸟的征程</p>
+                    
+                    <hr>
+                    <!-- SNS Link 社交 -->
+                    <ul class="list-inline">
+                        
+                        
+                        
+                        <li>
+                            <a target="_blank" href="https://www.zhihu.com/people/yoyoig">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+
+                        
+                        <li>
+                            <a target="_blank" href="http://weibo.com/yoyoig">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+
+                        
+
+                        
+                        <li>
+                            <a target="_blank" href="https://github.com/yoyoig">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+
+                        
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Featured Tags  标签 -->
             
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="es-ik">
-                    <span class="tag-text">es-ik</span>
-                </span>
-                
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/11/ES中文分词器/">
-                        <h2 class="post-title">
-                            ES中文分词器
-                        </h2>
-                        
-                    </a>
+            <section>
+                <div class="tags">
+                    
+                    
+                    <a href="/myBlogs/Tags/#es-ik" title="es-ik"
+                       rel="1">es-ik</a>
+                    
+                    
+                    
+                    <a href="/myBlogs/Tags/#elasticsearch" title="elasticsearch"
+                       rel="8">elasticsearch</a>
+                    
+                    
+                    
+                    <a href="/myBlogs/Tags/#spring boot" title="spring boot"
+                       rel="2">spring boot</a>
+                    
+                    
+                    
+                    <a href="/myBlogs/Tags/#Java" title="Java"
+                       rel="2">Java</a>
+                    
+                    
                 </div>
-                <hr>
-                
-            </div>
+            </section>
             
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="elasticsearch">
-                    <span class="tag-text">elasticsearch</span>
-                </span>
-                
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/11/ES中文分词器/">
-                        <h2 class="post-title">
-                            ES中文分词器
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/06/20/ES搜索精准度/">
-                        <h2 class="post-title">
-                            ES搜索精准度
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/11/修改Mapping/">
-                        <h2 class="post-title">
-                            ES修改Mapping
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/05/09/ES结构化搜索/">
-                        <h2 class="post-title">
-                            ES结构化搜索
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/23/初识Mapping/">
-                        <h2 class="post-title">
-                            初识Mapping
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/19/初识搜索引擎/">
-                        <h2 class="post-title">
-                            初识搜索引擎一
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/21/初识搜索引擎二/">
-                        <h2 class="post-title">
-                            初识搜索引擎二
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/06/20/聚合数据分析/">
-                        <h2 class="post-title">
-                            聚合数据分析
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-            </div>
+
             
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="spring boot">
-                    <span class="tag-text">spring boot</span>
-                </span>
+            <hr>
+            <h5 style="text-align: center;">Friends</h5>
+            <ul class="list-inline" style="text-align: center;">
                 
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/19/异步邮件发送/">
-                        <h2 class="post-title">
-                            异步邮件发送
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
+                <li><a href="http://wangxuanbo.gitee.io/blog/" target="_blank">波波&#39;s blog</a></li>
                 
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/19/微服务文件上传/">
-                        <h2 class="post-title">
-                            微服务文件上传
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
+                <li><a href="https://home.cnblogs.com/u/chiangchou/" target="_blank">chiangchou</a></li>
                 
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="Java">
-                    <span class="tag-text">Java</span>
-                </span>
+                <li><a href="https://home.cnblogs.com/u/jiaqingshareing/" target="_blank">jiaqing</a></li>
                 
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/19/异步邮件发送/">
-                        <h2 class="post-title">
-                            异步邮件发送
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
+                <li><a href="http://xiezixi.gitee.io/blog/" target="_blank">西瓜皮&#39;s blog</a></li>
                 
-                <div class="post-preview">
-                    <a href="/myBlogs/2018/04/19/微服务文件上传/">
-                        <h2 class="post-title">
-                            微服务文件上传
-                        </h2>
-                        
-                    </a>
-                </div>
-                <hr>
-                
-            </div>
+            </ul>
             
 
         </div>

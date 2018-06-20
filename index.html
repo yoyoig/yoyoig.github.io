@@ -1,14 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?9714659624b7b380bb842c081a38bb19";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
 
 <!-- Head tag -->
 <head>
@@ -89,14 +80,6 @@ var _hmt = _hmt || [];
                         
 							
                         <li>
-                            <a href="/myBlogs/Tags/">标签</a>
-                        </li>
-							
-						
-                    
-                        
-							
-                        <li>
                             <a href="/myBlogs/About/">关于</a>
                         </li>
 							
@@ -106,6 +89,14 @@ var _hmt = _hmt || [];
 							
                         <li>
                             <a href="/myBlogs/Archive/">归档</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Tags/">标签</a>
                         </li>
 							
 						
@@ -293,6 +284,61 @@ var _hmt = _hmt || [];
     <div class="row">
         <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
             <!-- Main Content -->
+
+
+
+<!--首页POST内容-->
+<div class="post-preview "
+     style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/es-aggregation.jpg')">
+    <a href="/myBlogs/2018/06/20/聚合数据分析/">
+        <h2 class="post-title">
+            聚合数据分析
+        </h2>
+        <p class="post-meta">
+            <!--日期-->
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-06-20
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                聚合数据分析核心概念bucket和metric
+bucket: 篮子的意思,即将相同类别的数据,作为一组放到一个篮子里.
+metric: 对一个分组的数据进行统计
+聚合结果默认是对指定条件下搜索的结果进行聚合.并不是对全部数据进行聚合.
+
+对比与sql语句:1select count(*) fr..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<!--首页POST内容-->
+<div class="post-preview "
+     style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/es-precision.jpg')">
+    <a href="/myBlogs/2018/06/20/ES搜索精准度/">
+        <h2 class="post-title">
+            ES搜索精准度
+        </h2>
+        <p class="post-meta">
+            <!--日期-->
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-06-20
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                提高搜索精读手动控制全文检索结果的精准度给定如下数据1234567891011POST /forum/article/_bulk&#123; &quot;update&quot;: &#123; &quot;_id&quot;: &quot;1&quot;&#125; &#125;&#123; ..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
 
 
 
@@ -516,36 +562,15 @@ index/type 的mapping是不能修改的
 
 
 
-<!--首页POST内容-->
-<div class="post-preview "
-     style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/e824b899a9014c081cb1b4a2097b02087bf4f42b.jpg')">
-    <a href="/myBlogs/2018/04/11/hello-world/">
-        <h2 class="post-title">
-            Hello World
-        </h2>
-        <p class="post-meta">
-            <!--日期-->
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-04-11
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer i..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
 
 <!-- 翻页 pager -->
 
 <ul class="pager">
     
+    
+    <li class="next">
+        <a href="/myBlogs/page/2/">Older Posts &rarr;</a>
+    </li>
     
 </ul>
 
@@ -622,8 +647,13 @@ index/type 的mapping是不能修改的
                 <div class="tags">
                     
                     
+                    <a href="/myBlogs/Tags/#es-ik" title="es-ik"
+                       rel="1">es-ik</a>
+                    
+                    
+                    
                     <a href="/myBlogs/Tags/#elasticsearch" title="elasticsearch"
-                       rel="6">elasticsearch</a>
+                       rel="8">elasticsearch</a>
                     
                     
                     
@@ -634,11 +664,6 @@ index/type 的mapping是不能修改的
                     
                     <a href="/myBlogs/Tags/#Java" title="Java"
                        rel="2">Java</a>
-                    
-                    
-                    
-                    <a href="/myBlogs/Tags/#es-ik" title="es-ik"
-                       rel="1">es-ik</a>
                     
                     
                 </div>

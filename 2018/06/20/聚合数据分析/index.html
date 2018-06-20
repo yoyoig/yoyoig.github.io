@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Yoyoig" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        聚合数据分析｜undefined
+        
+    </title>
+
+    <link rel="canonical" href="http://mingke_yan.gitee.io/myBlogs/2018/06/20/聚合数据分析/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/myBlogs/">
+                <span class="brand-logo">
+                    Yoyoig
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/myBlogs/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/About/">关于</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Archive/">归档</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Tags/">标签</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p5ioqsms3.bkt.clouddn.com/es-aggregation.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p5ioqsms3.bkt.clouddn.com/es-aggregation.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>聚合数据分析</h1>
+                    
+                    <span class="meta">
+                         作者 yoyoig
+                        <span>
+                          日期 2018-06-20
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/myBlogs/Tags/#elasticsearch"
+                           title="elasticsearch">elasticsearch</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            聚合数据分析
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="聚合数据分析"><a href="#聚合数据分析" class="headerlink" title="聚合数据分析"></a>聚合数据分析</h2><h3 id="核心概念bucket和metric"><a href="#核心概念bucket和metric" class="headerlink" title="核心概念bucket和metric"></a>核心概念bucket和metric</h3><ul>
+<li>bucket: 篮子的意思,即将相同类别的数据,作为一组放到一个篮子里.</li>
+<li>metric: 对一个分组的数据进行统计</li>
+<li>聚合结果默认是对指定条件下搜索的结果进行聚合.并不是对全部数据进行聚合.</li>
+</ul>
+<p>对比与sql语句:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select count(*) from access_log group by user_id</span><br></pre></td></tr></table></figure></p>
+<p>bucket: group by user_id<br>metric: count(*)  </p>
+<hr>
+<h4 id="更多的metric"><a href="#更多的metric" class="headerlink" title="更多的metric"></a>更多的metric</h4><ul>
+<li>count：bucket，terms，自动就会有一个doc_count，就相当于是count</li>
+<li>avg：avg aggs，求平均值</li>
+<li>max：求一个bucket内，指定field值最大的那个数据</li>
+<li>min：求一个bucket内，指定field值最小的那个数据</li>
+<li>sum：求一个bucket内，指定field值的总和</li>
+<li><p>histogram: 将数字类型的字段,进行指定区间分组.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 对价格以2000为范围进行分组,[0,2000),[2000,4000)···</span><br><span class="line">&quot;histogram&quot;: &#123;</span><br><span class="line">    &quot;field&quot;: &quot;price&quot;,</span><br><span class="line">    &quot;interval&quot;: 2000</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>date_histogram 将日期类型的字段,进行指定区间分组.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">GET /tvs/sales/_search</span><br><span class="line">&#123;</span><br><span class="line">   &quot;size&quot; : 0,</span><br><span class="line">   &quot;aggs&quot;: &#123;</span><br><span class="line">      &quot;sales&quot;: &#123;</span><br><span class="line">         &quot;date_histogram&quot;: &#123;</span><br><span class="line">            &quot;field&quot;: &quot;sold_date&quot;,</span><br><span class="line">            &quot;interval&quot;: &quot;month&quot;,  // 间隔</span><br><span class="line">            &quot;format&quot;: &quot;yyyy-MM-dd&quot;,</span><br><span class="line">            &quot;min_doc_count&quot; : 0, // 最小的返回值,若为1,则只返回doc_count为1和以上的bucket.</span><br><span class="line">            &quot;extended_bounds&quot; : &#123;  // 范围区间</span><br><span class="line">                &quot;min&quot; : &quot;2016-01-01&quot;,</span><br><span class="line">                &quot;max&quot; : &quot;2017-12-31&quot;</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定条件下搜索结果的聚合和全局聚合对比  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// 查询小米平均价格和全部平均价格</span><br><span class="line">GET /tvs/sales/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;: 10,</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;term&quot;: &#123;</span><br><span class="line">      &quot;brand&quot;: &#123;</span><br><span class="line">        &quot;value&quot;: &quot;小米&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;avg_price&quot;:&#123;</span><br><span class="line">      &quot;avg&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;price&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;all&quot;:&#123;</span><br><span class="line">      &quot;global&quot;: &#123;&#125;, // 指定为全局聚合</span><br><span class="line">      &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;all_avg_price&quot;: &#123;</span><br><span class="line">          &quot;avg&quot;: &#123;</span><br><span class="line">            &quot;field&quot;: &quot;price&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>aggs.filter 对聚合进行过滤(不是全局过滤)<br>场景: 当我们需要同时统计多个月的平均值时.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 聚合最近5个月的平均价格</span><br><span class="line">&quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;recent_150d&quot;: &#123;</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;range&quot;: &#123;</span><br><span class="line">          &quot;sold_date&quot;: &#123;</span><br><span class="line">            // 最近的150天</span><br><span class="line">            &quot;gte&quot;: &quot;now-150d&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;recent_150d_avg_price&quot;: &#123;</span><br><span class="line">          &quot;avg&quot;: &#123;</span><br><span class="line">            &quot;field&quot;: &quot;price&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>aggs 聚合排序<br>默认情况下是按<code>doc_count</code>降序排序.我们可以通过<code>order</code>来指定该aggs的排序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">GET /tvs/sales/_search </span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;: 0,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;group_by_color&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;color&quot;,</span><br><span class="line">        &quot;order&quot;: &#123;</span><br><span class="line">          &quot;avg_price&quot;: &quot;asc&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;avg_price&quot;: &#123;</span><br><span class="line">          &quot;avg&quot;: &#123;</span><br><span class="line">            &quot;field&quot;: &quot;price&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>cartinality去重聚合</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 统计品牌下的数量.</span><br><span class="line">&quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;distinct_colors&quot; : &#123;</span><br><span class="line">      &quot;cardinality&quot; : &#123;</span><br><span class="line">        &quot;field&quot; : &quot;brand&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="实践操作"><a href="#实践操作" class="headerlink" title="实践操作"></a>实践操作</h3><hr>
+<h4 id="统计哪种颜色的电视销量最高"><a href="#统计哪种颜色的电视销量最高" class="headerlink" title="统计哪种颜色的电视销量最高"></a>统计哪种颜色的电视销量最高</h4><p>聚合语法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /tvs/sales/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;: 0,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;popular_colors&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;color&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>size：获取搜索结果的条数.</li>
+<li>aggs：固定语法，对一份数据执行分组聚合操作.</li>
+<li>popular_colors：就是对每个aggs，都要起一个名字(任意).</li>
+<li>terms：根据字段的值进行分组</li>
+<li>field：根据指定的字段的值进行分组</li>
+</ul>
+<p>搜索结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;took&quot;: 0,</span><br><span class="line">  &quot;timed_out&quot;: false,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 5,</span><br><span class="line">    &quot;successful&quot;: 5,</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 8,</span><br><span class="line">    &quot;max_score&quot;: 0,</span><br><span class="line">    &quot;hits&quot;: []</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;aggregations&quot;: &#123;</span><br><span class="line">    &quot;popular_colors&quot;: &#123;</span><br><span class="line">      &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">      &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">      &quot;buckets&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;红色&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 4</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;绿色&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 2</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;蓝色&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 2</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>hits.hits：搜索的结果,由于我们指定为0,所以为空.</li>
+<li>aggregations：聚合结果</li>
+<li>popular_color：我们指定的某个聚合的名称</li>
+<li>buckets：根据我们指定的field划分出的分组(bucket)</li>
+<li>key：每个bucket对应的那个值(分组的字段值)</li>
+<li>doc_count：该组的结果数量.  </li>
+<li>每种颜色对应的bucket中的数据的<br>默认的排序规则：按照doc_count降序排序</li>
+</ul>
+<hr>
+<h4 id="统计每种颜色电视平均价格"><a href="#统计每种颜色电视平均价格" class="headerlink" title="统计每种颜色电视平均价格"></a>统计每种颜色电视平均价格</h4><p>搜索语法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">GET /tvs/sales/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;: 0,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;popular_color&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;color&quot;,</span><br><span class="line">        &quot;size&quot;: 10</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;avg_price&quot;: &#123;</span><br><span class="line">          &quot;avg&quot;: &#123;</span><br><span class="line">            &quot;field&quot;: &quot;price&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对颜色分组下的数据的价格,进行avg聚合;<br>aggregations结果如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&quot;aggregations&quot;: &#123;</span><br><span class="line">    &quot;popular_color&quot;: &#123;</span><br><span class="line">      &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">      &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">      &quot;buckets&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;红色&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 4,</span><br><span class="line">          &quot;avg_color&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 3250</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;绿色&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 2,</span><br><span class="line">          &quot;avg_color&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 2100</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;蓝色&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 2,</span><br><span class="line">          &quot;avg_color&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 2000</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>对应的sql语句:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select avg(price) from tvs.sales group by color</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="颜色-品牌多层聚合"><a href="#颜色-品牌多层聚合" class="headerlink" title="颜色+品牌多层聚合"></a>颜色+品牌多层聚合</h4><p>搜索语法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">GET /tvs/sales/_search </span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;: 0,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;group_by_color&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;color&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;color_avg_price&quot;: &#123;</span><br><span class="line">          &quot;avg&quot;: &#123;</span><br><span class="line">            &quot;field&quot;: &quot;price&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;group_by_brand&quot;: &#123;</span><br><span class="line">          &quot;terms&quot;: &#123;</span><br><span class="line">            &quot;field&quot;: &quot;brand&quot;</span><br><span class="line">          &#125;,</span><br><span class="line">          &quot;aggs&quot;: &#123;</span><br><span class="line">            &quot;brand_avg_price&quot;: &#123;</span><br><span class="line">              &quot;avg&quot;: &#123;</span><br><span class="line">                &quot;field&quot;: &quot;price&quot;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在聚合出颜色和颜色平均价格的同时,再将该颜色下的品牌聚合并计算平均价格.<br>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">&quot;aggregations&quot;: &#123;</span><br><span class="line">  &quot;popular_color&quot;: &#123;</span><br><span class="line">    &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">    &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">    &quot;buckets&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;key&quot;: &quot;红色&quot;,</span><br><span class="line">        &quot;doc_count&quot;: 4,</span><br><span class="line">        &quot;avg_price&quot;: &#123;</span><br><span class="line">          &quot;value&quot;: 3250</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;brand&quot;: &#123;</span><br><span class="line">          &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">          &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">          &quot;buckets&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;key&quot;: &quot;长虹&quot;,</span><br><span class="line">              &quot;doc_count&quot;: 3,</span><br><span class="line">              &quot;avg_price&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: 1666.6666666666667</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;key&quot;: &quot;三星&quot;,</span><br><span class="line">              &quot;doc_count&quot;: 1,</span><br><span class="line">              &quot;avg_price&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: 8000</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;key&quot;: &quot;绿色&quot;,</span><br><span class="line">        &quot;doc_count&quot;: 2,</span><br><span class="line">        &quot;avg_price&quot;: &#123;</span><br><span class="line">          &quot;value&quot;: 2100</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;brand&quot;: &#123;</span><br><span class="line">          &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">          &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">          &quot;buckets&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;key&quot;: &quot;TCL&quot;,</span><br><span class="line">              &quot;doc_count&quot;: 1,</span><br><span class="line">              &quot;avg_price&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: 1200</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;key&quot;: &quot;小米&quot;,</span><br><span class="line">              &quot;doc_count&quot;: 1,</span><br><span class="line">              &quot;avg_price&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: 3000</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;key&quot;: &quot;蓝色&quot;,</span><br><span class="line">        &quot;doc_count&quot;: 2,</span><br><span class="line">        &quot;avg_price&quot;: &#123;</span><br><span class="line">          &quot;value&quot;: 2000</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;brand&quot;: &#123;</span><br><span class="line">          &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">          &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">          &quot;buckets&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;key&quot;: &quot;TCL&quot;,</span><br><span class="line">              &quot;doc_count&quot;: 1,</span><br><span class="line">              &quot;avg_price&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: 1500</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">              &quot;key&quot;: &quot;小米&quot;,</span><br><span class="line">              &quot;doc_count&quot;: 1,</span><br><span class="line">              &quot;avg_price&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: 2500</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h6 id="上面用到的数据"><a href="#上面用到的数据" class="headerlink" title="上面用到的数据"></a>上面用到的数据</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">PUT /tvs</span><br><span class="line">&#123;</span><br><span class="line">	&quot;mappings&quot;: &#123;</span><br><span class="line">		&quot;sales&quot;: &#123;</span><br><span class="line">			&quot;properties&quot;: &#123;</span><br><span class="line">				&quot;price&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;long&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;color&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;brand&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;sold_date&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST /tvs/sales/_bulk</span><br><span class="line">&#123; &quot;index&quot;: &#123;&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 1000, &quot;color&quot; : &quot;红色&quot;, &quot;brand&quot; : &quot;长虹&quot;, &quot;sold_date&quot; : &quot;2016-10-28&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 2000, &quot;color&quot; : &quot;红色&quot;, &quot;brand&quot; : &quot;长虹&quot;, &quot;sold_date&quot; : &quot;2016-11-05&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 3000, &quot;color&quot; : &quot;绿色&quot;, &quot;brand&quot; : &quot;小米&quot;, &quot;sold_date&quot; : &quot;2016-05-18&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 1500, &quot;color&quot; : &quot;蓝色&quot;, &quot;brand&quot; : &quot;TCL&quot;, &quot;sold_date&quot; : &quot;2016-07-02&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 1200, &quot;color&quot; : &quot;绿色&quot;, &quot;brand&quot; : &quot;TCL&quot;, &quot;sold_date&quot; : &quot;2016-08-19&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 2000, &quot;color&quot; : &quot;红色&quot;, &quot;brand&quot; : &quot;长虹&quot;, &quot;sold_date&quot; : &quot;2016-11-05&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 8000, &quot;color&quot; : &quot;红色&quot;, &quot;brand&quot; : &quot;三星&quot;, &quot;sold_date&quot; : &quot;2017-01-01&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 2500, &quot;color&quot; : &quot;蓝色&quot;, &quot;brand&quot; : &quot;小米&quot;, &quot;sold_date&quot; : &quot;2017-02-12&quot; &#125;</span><br></pre></td></tr></table></figure>
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/myBlogs/2018/06/20/ES搜索精准度/" data-toggle="tooltip" data-placement="top"
+                           title="ES搜索精准度">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!--友言评论框-->
+                
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNTY3MS8xMjIwNw==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+
+                <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                    <!-- Featured Tags -->
+                    
+                    <section>
+                        <!-- no hr -->
+                        <h5 class="text-center">
+                            <a href="/myBlogs/tags/">FEATURED TAGS</a>
+                        </h5>
+                        <div class="tags">
+                            
+                            <a class="tag" href="/myBlogs/Tags/#elasticsearch"
+                               title="elasticsearch">elasticsearch</a>
+                            
+                        </div>
+                    </section>
+                    
+
+                    <!-- Friends Blog -->
+                    
+                    <div style="margin-top: 20px;">
+                        <h5 class="text-center">FRIENDS</h5>
+                        <ul class="list-inline text-center">
+                            
+                            <li><a href="http://wangxuanbo.gitee.io/blog/">波波&#39;s blog</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/chiangchou/">chiangchou</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/jiaqingshareing/">jiaqing</a></li>
+                            
+                            <li><a href="http://xiezixi.gitee.io/blog/">西瓜皮&#39;s blog</a></li>
+                            
+                        </ul>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <!--目录-->
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#聚合数据分析"><span class="toc-text">聚合数据分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#核心概念bucket和metric"><span class="toc-text">核心概念bucket和metric</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#更多的metric"><span class="toc-text">更多的metric</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实践操作"><span class="toc-text">实践操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#统计哪种颜色的电视销量最高"><span class="toc-text">统计哪种颜色的电视销量最高</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#统计每种颜色电视平均价格"><span class="toc-text">统计每种颜色电视平均价格</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#颜色-品牌多层聚合"><span class="toc-text">颜色+品牌多层聚合</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#上面用到的数据"><span class="toc-text">上面用到的数据</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Yoyoig 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/myBlogs/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/myBlogs/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/myBlogs/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://mingke_yan.gitee.io/myBlogs/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p5ioqsms3.bkt.clouddn.com/avtor.jpg">
+</body>
+
+</html>
