@@ -88,7 +88,7 @@
                         
 							
                         <li>
-                            <a href="/myBlogs/Archive/">归档</a>
+                            <a href="/myBlogs/Tags/">标签</a>
                         </li>
 							
 						
@@ -96,7 +96,7 @@
                         
 							
                         <li>
-                            <a href="/myBlogs/Tags/">标签</a>
+                            <a href="/myBlogs/Archive/">归档</a>
                         </li>
 							
 						
@@ -344,6 +344,67 @@ metric: 对一个分组的数据进行统计
 
 <!--首页POST内容-->
 <div class="post-preview "
+     style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/spring-social.jpg')">
+    <a href="/myBlogs/2018/05/24/Spring-Social原理及实践/">
+        <h2 class="post-title">
+            Spring Social原理及实践
+        </h2>
+        <p class="post-meta">
+            <!--日期-->
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-05-24
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                SpringSocial基本原理
+
+第一步到第五步是一个标准流程,第六步由于服务商不同,用户信息、结构和字段名等可能不同,所以第六步是个性化的。
+
+
+
+springSocial把OAuth认证流程封装到了SocialAuthenticationFilter 的过滤器中.
+
+
+服务提供商相关(Pr..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<!--首页POST内容-->
+<div class="post-preview "
+     style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/spring-security.jpg')">
+    <a href="/myBlogs/2018/05/15/Spring-Security原理及实践/">
+        <h2 class="post-title">
+            Spring Security原理及实践
+        </h2>
+        <p class="post-meta">
+            <!--日期-->
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-05-15
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                spring security 基本原理
+spring security核心就是security的过滤器链.绿色的过滤器,用来验证用户的身份.每一个过滤器就是一种认证的方式. 
+UsernamePasswordAuthenticationFilter用来处理表单登录,BasicAuthentic..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<!--首页POST内容-->
+<div class="post-preview "
      style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/structure_search.jpg')">
     <a href="/myBlogs/2018/05/09/ES结构化搜索/">
         <h2 class="post-title">
@@ -507,61 +568,6 @@ mapping，就是index的type的元数据，每个type都有一个自己的mappin
 
 
 
-<!--首页POST内容-->
-<div class="post-preview "
-     style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/1123134207-34.jpg')">
-    <a href="/myBlogs/2018/04/11/ES中文分词器/">
-        <h2 class="post-title">
-            ES中文分词器
-        </h2>
-        <p class="post-meta">
-            <!--日期-->
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-04-11
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                中文分词器介绍可以将中文搜索词拆分成一个个独立的词语,而不是将中文全部拆分成一个个汉字.还可以去除词语中的停用词比如 “么,让,在,额”等这些没用意义的词语,提高搜索效率.
-1、在elasticsearch中安装ik中文分词器
-git clone https://github.com/medcl..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<!--首页POST内容-->
-<div class="post-preview "
-     style="background-image: url('http://p5ioqsms3.bkt.clouddn.com/3-140P2115014.jpg')">
-    <a href="/myBlogs/2018/04/11/修改Mapping/">
-        <h2 class="post-title">
-            ES修改Mapping
-        </h2>
-        <p class="post-meta">
-            <!--日期-->
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-04-11
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                零宕机修改Mapping背景
-index/type 的mapping是不能修改的
-不手动创建mapping时,创建数据时会根据数据的值自动生成mapping(dynamic mapping),确定字段的类型.
-当mapping中的字段类型错误时.只能删除索引重新创建索引和mapping.方案:让..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
 
 <!-- 翻页 pager -->
 
@@ -647,13 +653,28 @@ index/type 的mapping是不能修改的
                 <div class="tags">
                     
                     
+                    <a href="/myBlogs/Tags/#elasticsearch" title="elasticsearch"
+                       rel="8">elasticsearch</a>
+                    
+                    
+                    
                     <a href="/myBlogs/Tags/#es-ik" title="es-ik"
                        rel="1">es-ik</a>
                     
                     
                     
-                    <a href="/myBlogs/Tags/#elasticsearch" title="elasticsearch"
-                       rel="8">elasticsearch</a>
+                    <a href="/myBlogs/Tags/#spring security" title="spring security"
+                       rel="2">spring security</a>
+                    
+                    
+                    
+                    <a href="/myBlogs/Tags/#java" title="java"
+                       rel="2">java</a>
+                    
+                    
+                    
+                    <a href="/myBlogs/Tags/#spring" title="spring"
+                       rel="2">spring</a>
                     
                     
                     

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Yoyoig" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Spring Social原理及实践｜undefined
+        
+    </title>
+
+    <link rel="canonical" href="http://mingke_yan.gitee.io/myBlogs/2018/05/24/Spring-Social原理及实践/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/myBlogs/">
+                <span class="brand-logo">
+                    Yoyoig
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/myBlogs/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/About/">关于</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Tags/">标签</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Archive/">归档</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p5ioqsms3.bkt.clouddn.com/spring-social.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p5ioqsms3.bkt.clouddn.com/spring-social.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Spring Social原理及实践</h1>
+                    
+                    <span class="meta">
+                         作者 yoyoig
+                        <span>
+                          日期 2018-05-24
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/myBlogs/Tags/#spring security"
+                           title="spring security">spring security</a>
+                        
+                        <a class="tag" href="/myBlogs/Tags/#java"
+                           title="java">java</a>
+                        
+                        <a class="tag" href="/myBlogs/Tags/#spring"
+                           title="spring">spring</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Spring Social原理及实践
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="SpringSocial基本原理"><a href="#SpringSocial基本原理" class="headerlink" title="SpringSocial基本原理"></a>SpringSocial基本原理</h2><p><img src="http://p8rp03a7o.bkt.clouddn.com/spring-social-1.png" alt="image"></p>
+<ul>
+<li>第一步到第五步是一个标准流程,第六步由于服务商不同,用户信息、结构和字段名等可能不同,所以第六步是个性化的。</li>
+</ul>
+<p><img src="http://p8rp03a7o.bkt.clouddn.com/spring-social-2.png" alt="image"></p>
+<ul>
+<li>springSocial把OAuth认证流程封装到了<code>SocialAuthenticationFilter</code> 的过滤器中.</li>
+</ul>
+<p><img src="http://p8rp03a7o.bkt.clouddn.com/spring-social-3.png" alt="image"></p>
+<h3 id="服务提供商相关-Provider"><a href="#服务提供商相关-Provider" class="headerlink" title="服务提供商相关(Provider)"></a>服务提供商相关(Provider)</h3><ul>
+<li><code>OAuth2Operations</code>接口封装了,第一步到第五步标准流程</li>
+<li><code>Api</code>接口, 需要我们自己写接口,实现第六步封装API的接口. 有<code>AbstractOAuth2ApiBinding</code>默认实现类.帮助我们更快实现第六步接口.</li>
+</ul>
+<h3 id="第三方登录相关"><a href="#第三方登录相关" class="headerlink" title="第三方登录相关"></a>第三方登录相关</h3><ul>
+<li><code>Connection</code>接口,用来封装前六步完成后,获取到的用户信息.</li>
+<li><code>ConnectionFactory</code>,用来创建实现了<code>Connection</code>接口的实例对象.创建时,需要用到<code>ServiceProvider</code>.</li>
+<li><code>Connection</code>接口封装的信息有固定的数据结构,而第六步获取的信息,是个个性化的信息.我们用<code>ApiAdaptor</code>适配器来进行适配一个对应关系.</li>
+<li>对应关系放在<code>UserConnection</code>表中,该表由<code>UserConnectionRepository</code>接口的实现来管理.</li>
+</ul>
+<h2 id="QQ登录"><a href="#QQ登录" class="headerlink" title="QQ登录"></a>QQ登录</h2><p><a href="http://wiki.connect.qq.com/%E7%BD%91%E7%AB%99%E5%BA%94%E7%94%A8%E6%8E%A5%E5%85%A5%E6%B5%81%E7%A8%8B" target="_blank" rel="noopener">QQ网站第三方登录文档</a></p>
+<h3 id="ServiceProvider实现"><a href="#ServiceProvider实现" class="headerlink" title="ServiceProvider实现"></a>ServiceProvider实现</h3><ul>
+<li><p>实现<code>AbstractOAuth2ApiBinding</code>获取用户信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public class QQImpl extends AbstractOAuth2ApiBinding implements QQ  &#123;</span><br><span class="line"></span><br><span class="line">    private static final String URL_GET_OPENID = &quot;https://graph.qq.com/oauth2.0/me?access_token=%s&quot;;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取用户信息接口,access_token由AbstractOAuth2ApiBinding为我们挂上.</span><br><span class="line">     */</span><br><span class="line">    private static final String URL_GET_USERINFO = &quot;https://graph.qq.com/user/get_user_info?oauth_consumer_key=%s&amp;openid=%s&quot;;</span><br><span class="line"></span><br><span class="line">    private String appId;</span><br><span class="line"></span><br><span class="line">    private String openId;</span><br><span class="line"></span><br><span class="line">    private ObjectMapper objectMapper = new ObjectMapper();</span><br><span class="line"></span><br><span class="line">    public QQImpl(String accessToken, String appId) &#123;</span><br><span class="line">        // TokenStrategy.ACCESS_TOKEN_PARAMETER,将token作为URL参数发送请求</span><br><span class="line">        super(accessToken, TokenStrategy.ACCESS_TOKEN_PARAMETER);</span><br><span class="line">        this.appId = appId;</span><br><span class="line">        String url = String.format(URL_GET_OPENID,accessToken);</span><br><span class="line">        // 发送请求获取openId;</span><br><span class="line">        String result = getRestTemplate().getForObject(url,String.class);</span><br><span class="line">        this.openId = StringUtils.substringBetween(result,&quot;\&quot;openid\&quot;:&quot;,&quot;&#125;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public QQUserInfo getUserInfo() throws IOException &#123;</span><br><span class="line"></span><br><span class="line">        String url = String.format(URL_GET_USERINFO,appId,openId);</span><br><span class="line">        String result = getRestTemplate().getForObject(url,String.class);</span><br><span class="line">        return objectMapper.readValue(result,QQUserInfo.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现<code>AbstractOAuth2ServiceProvider</code>接口,封装<code>AbstractOAuth2ApiBinding</code>实现,使用<code>OAuth2Template</code>走完第一到第五步认证流程,获取accessToken.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public class QQServiceProvider extends AbstractOAuth2ServiceProvider&lt;QQ&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private String appId;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 第一步,将用户导向该地址,让用户授权登录URL</span><br><span class="line">     */</span><br><span class="line">    private static final String URL_AUTHORIZE = &quot;https://graph.qq.com/oauth2.0/authorize&quot;;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 第四步,用户同意后,用授权成功后返回的授权码,申请令牌URL</span><br><span class="line">     */</span><br><span class="line">    private static final String URL_ACCESS_TOKEN = &quot;https://graph.qq.com/oauth2.0/token&quot;;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 使用OAuth2Template实现第一步到第五步流程</span><br><span class="line">     * @param appId</span><br><span class="line">     * @param appSecret</span><br><span class="line">     */</span><br><span class="line">    public QQServiceProvider(String appId, String appSecret) &#123;</span><br><span class="line">        super(new OAuth2Template(appId,appSecret,URL_AUTHORIZE,URL_ACCESS_TOKEN));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 使用AbstractOAuth2ApiBinding的实现,获取用户信息</span><br><span class="line">     * @param accessToken</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public QQ getApi(String accessToken) &#123;</span><br><span class="line">        return new QQImpl(accessToken,appId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="ConnectionFactory"><a href="#ConnectionFactory" class="headerlink" title="ConnectionFactory"></a>ConnectionFactory</h3><ul>
+<li><p>实现ApiAdapter,把第三方用户信息和QQ用户信息对应。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">public class QQAdapter implements ApiAdapter&lt;QQ&gt; &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 用于测试</span><br><span class="line">     * @param api</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public boolean test(QQ api) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 设置connection需要的值</span><br><span class="line">     * @param api</span><br><span class="line">     * @param values</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void setConnectionValues(QQ api, ConnectionValues values) &#123;</span><br><span class="line">        QQUserInfo userInfo = api.getUserInfo();</span><br><span class="line"></span><br><span class="line">        values.setDisplayName(userInfo.getNickname());</span><br><span class="line">        values.setImageUrl(userInfo.getFigureurl_1());</span><br><span class="line">        // 个人主页项,QQ没有</span><br><span class="line">        values.setProfileUrl(null);</span><br><span class="line">        // 用户在服务商的唯一标识</span><br><span class="line">        values.setProviderUserId(userInfo.getOpenId());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 用于绑定解绑</span><br><span class="line">     * @param api</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public UserProfile fetchUserProfile(QQ api) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 微博等,更新微博</span><br><span class="line">     * @param api</span><br><span class="line">     * @param message</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void updateStatus(QQ api, String message) &#123;</span><br><span class="line">        // do nothing</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现OAuth2ConnectionFactory</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class QQConnectionFactory extends OAuth2ConnectionFactory&lt;QQ&gt; &#123;</span><br><span class="line"></span><br><span class="line">    public QQConnectionFactory(String providerId, String appId, String appSecret) &#123;</span><br><span class="line">        // 包装ServiceProvider进行第三方校验和QQAdapter适配器进行信息对应</span><br><span class="line">        super(providerId, new QQServiceProvider(appId, appSecret), new QQAdapter());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置UserConnectionRepository</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">@EnableSocial</span><br><span class="line">public class SocialConfig extends SocialConfigurerAdapter &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private DataSource dataSource;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) &#123;</span><br><span class="line">         JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());</span><br><span class="line">         // 当创建的表,有前缀时.</span><br><span class="line">         repository.setTablePrefix(&quot;yoyoig_&quot;);</span><br><span class="line">         return repository;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 配置Social过滤器配置</span><br><span class="line">    @Bean</span><br><span class="line">    public SpringSocialConfigurer mySocialSecurityConfig()&#123;</span><br><span class="line">        return new SpringSocialConfigurer();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>spring提供的表结构如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">create table UserConnection (</span><br><span class="line">    userId varchar(255) not null,  // 业务系统的用户ID</span><br><span class="line">	providerId varchar(255) not null, //服务提供商的ID,是QQ还是微信微博等.</span><br><span class="line">	providerUserId varchar(255),  // openId,改用户对应服务提供商的用户ID</span><br><span class="line">	rank int not null,</span><br><span class="line">	displayName varchar(255),</span><br><span class="line">	profileUrl varchar(512),</span><br><span class="line">	imageUrl varchar(512),</span><br><span class="line">	accessToken varchar(512) not null,</span><br><span class="line">	secret varchar(512),</span><br><span class="line">	refreshToken varchar(512),</span><br><span class="line">	expireTime bigint,</span><br><span class="line">	primary key (userId, providerId, providerUserId));</span><br><span class="line">create unique index UserConnectionRank on UserConnection(userId, providerId, rank);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在使用QQ登录时,要写QQ登录的UserDetailService.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class QQUserDetailsService implements  SocialUserDetailsService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private UserMapper mapper;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private PasswordEncoder passwordEncoder;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * social登录时,获取用户信息</span><br><span class="line">     * @param userId</span><br><span class="line">     * @return</span><br><span class="line">     * @throws UsernameNotFoundException</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException &#123;</span><br><span class="line">        // 查询UserConnection表中的用户信息</span><br><span class="line">        mapper.findByUserId(userId);</span><br><span class="line">        return new User(username,&quot;123132&quot;,true,true,true,false,AuthorityUtils.commaSeparatedStringToAuthorityList(&quot;&quot;));</span><br><span class="line">        return  null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将Social过滤器配置到过滤器上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">private SpringSocialConfigurer mySocialConfigurer;</span><br><span class="line">---</span><br><span class="line">http    .apply(mySocialConfigurer)</span><br><span class="line">        .and()</span><br><span class="line">        .rememberMe()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>拦截QQ登录的URL</p>
+<blockquote>
+<p>拦截url为/auth/qq</p>
+<p>默认为/auth/ 下的url</p>
+<p>qq为生成<code>QQConnectionFactory</code>时的第一个参数,我们这位providerId,为QQ. providerId可配</p>
+</blockquote>
+</li>
+<li><p>自己配置”/auth”url</p>
+<blockquote>
+<p>由于<code>/auth</code>是在<code>SpringSocialConfigurer</code>中配置的拦截器<code>SocialAuthenticationFilter</code>配置的.所以可以进行如下操作</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class MySpringSocialConfig extends SpringSocialConfigurer &#123;</span><br><span class="line"></span><br><span class="line">    private String filterProcessesUrl;</span><br><span class="line"></span><br><span class="line">    public MySpringSocialConfig(String filterProcessesUrl)&#123;</span><br><span class="line">        this.filterProcessesUrl = filterProcessesUrl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected &lt;T&gt; T postProcess(T object) &#123;</span><br><span class="line">        SocialAuthenticationFilter filter = (SocialAuthenticationFilter) super.postProcess(object);</span><br><span class="line">        filter.setFilterProcessesUrl(filterProcessesUrl);</span><br><span class="line">        return (T)filter;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改SocialConfig,通过配置文件配置<code>url</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">    private SecurityProperties securityProperties;</span><br><span class="line">---</span><br><span class="line">@Bean</span><br><span class="line">public SpringSocialConfigurer mySocialSecurityConfig()&#123;</span><br><span class="line">    return new MySpringSocialConfig(securityProperties.getSocial().getFilterProcessesUrl());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="http://p8rp03a7o.bkt.clouddn.com/spring-social-4.png" alt="image"></p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/myBlogs/2018/06/20/ES搜索精准度/" data-toggle="tooltip" data-placement="top"
+                           title="ES搜索精准度">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/myBlogs/2018/05/15/Spring-Security原理及实践/" data-toggle="tooltip" data-placement="top"
+                           title="Spring Security原理及实践">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!--友言评论框-->
+                
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNTY3MS8xMjIwNw==">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+                
+
+                <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                    <!-- Featured Tags -->
+                    
+                    <section>
+                        <!-- no hr -->
+                        <h5 class="text-center">
+                            <a href="/myBlogs/tags/">FEATURED TAGS</a>
+                        </h5>
+                        <div class="tags">
+                            
+                            <a class="tag" href="/myBlogs/Tags/#spring security"
+                               title="spring security">spring security</a>
+                            
+                            <a class="tag" href="/myBlogs/Tags/#java"
+                               title="java">java</a>
+                            
+                            <a class="tag" href="/myBlogs/Tags/#spring"
+                               title="spring">spring</a>
+                            
+                        </div>
+                    </section>
+                    
+
+                    <!-- Friends Blog -->
+                    
+                    <div style="margin-top: 20px;">
+                        <h5 class="text-center">FRIENDS</h5>
+                        <ul class="list-inline text-center">
+                            
+                            <li><a href="http://wangxuanbo.gitee.io/blog/">波波&#39;s blog</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/chiangchou/">chiangchou</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/jiaqingshareing/">jiaqing</a></li>
+                            
+                            <li><a href="http://xiezixi.gitee.io/blog/">西瓜皮&#39;s blog</a></li>
+                            
+                        </ul>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <!--目录-->
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringSocial基本原理"><span class="toc-text">SpringSocial基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#服务提供商相关-Provider"><span class="toc-text">服务提供商相关(Provider)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三方登录相关"><span class="toc-text">第三方登录相关</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#QQ登录"><span class="toc-text">QQ登录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ServiceProvider实现"><span class="toc-text">ServiceProvider实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ConnectionFactory"><span class="toc-text">ConnectionFactory</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Yoyoig 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/myBlogs/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/myBlogs/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/myBlogs/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://mingke_yan.gitee.io/myBlogs/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p5ioqsms3.bkt.clouddn.com/avtor.jpg">
+</body>
+
+</html>
