@@ -21,6 +21,8 @@
         初识Mapping｜undefined
         
     </title>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
 
     <link rel="canonical" href="http://mingke_yan.gitee.io/myBlogs/2018/04/23/初识Mapping/">
 
@@ -336,24 +338,19 @@
 
                 <!--加入新的评论系统-->
                 
-                <!-- 来必力City版安装代码 -->
-                <div id="lv-container" data-id="city" data-uid="MTAyMC8zNTY3MS8xMjIwNw==">
-                    <script type="text/javascript">
-                        (function(d, s) {
-                            var j, e = d.getElementsByTagName(s)[0];
-
-                            if (typeof LivereTower === 'function') { return; }
-
-                            j = d.createElement(s);
-                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-                            j.async = true;
-
-                            e.parentNode.insertBefore(j, e);
-                        })(document, 'script');
-                    </script>
-                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
-                </div>
-                <!-- City版安装代码已完成 -->
+                
+                
+                <div class="comment"></div>
+                <script>
+                    new Valine({
+                        // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+                        av: AV, 
+                        el: '.comment', // 
+                        app_id: 'pDX4cMkVAP7E096e9hemfGVP-gzGzoHsz', // 这里填写上面得到的APP ID
+                        app_key: 'XkcDkuJ6A4UWvRl8slXVICDm', // 这里填写上面得到的APP KEY
+                        placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+                    });
+                </script>
                 
 
                 <div class="
