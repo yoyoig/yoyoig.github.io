@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <meta name="baidu-site-verification" content="wJ4D4HWEIs" />
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Yoyoig" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        spring boot redis缓存｜undefined
+        
+    </title>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+    <link rel="canonical" href="http://mingke_yan.gitee.io/myBlogs/2018/07/31/Redis缓存/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/myBlogs/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/myBlogs/">
+                <span class="brand-logo">
+                    Yoyoig
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/myBlogs/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/About/">关于</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Archive/">归档</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/myBlogs/Tags/">标签</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://p5ioqsms3.bkt.clouddn.com/spring-boot-redis.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://p5ioqsms3.bkt.clouddn.com/spring-boot-redis.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>spring boot redis缓存</h1>
+                    
+                    <span class="meta">
+                         作者 yoyoig
+                        <span>
+                          日期 2018-07-31
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/myBlogs/Tags/#spring boot"
+                           title="spring boot">spring boot</a>
+                        
+                        <a class="tag" href="/myBlogs/Tags/#redis"
+                           title="redis">redis</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            spring boot redis缓存
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="配置redis缓存"><a href="#配置redis缓存" class="headerlink" title="配置redis缓存"></a>配置redis缓存</h2><ol>
+<li><p>引入依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置redis数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  redis:</span><br><span class="line">    host: $&#123;REDIS_HOST:localhost&#125;</span><br><span class="line">    port: $&#123;REDIS_PORT:6379&#125;</span><br><span class="line">    database: $&#123;REDIS_DATABASE:10&#125;</span><br><span class="line">    pool:</span><br><span class="line">      max-active: 8   #连接池最大连接数，负数表示没有限制</span><br><span class="line">      max-wait: -1    #最大阻塞等待时间，负值表示没有限制</span><br><span class="line">      min-idle: 0     #连接池中最小空闲连接</span><br><span class="line">      max-idle: 8     #连接池中最大空闲连接</span><br><span class="line">      timeout: 0      #连接超时时间（毫秒）</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置redis缓存类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">@EnableCaching</span><br><span class="line">public class RedisCacheConfig extends CachingConfigurerSupport&#123;</span><br><span class="line">    /**</span><br><span class="line">    * 配置redisTemplate</span><br><span class="line">    */</span><br><span class="line">    @Bean</span><br><span class="line">    public RedisTemplate&lt;String, String&gt; redisTemplate(RedisConnectionFactory factory) &#123;</span><br><span class="line">        RedisTemplate&lt;String, String&gt; redisTemplate = new RedisTemplate&lt;String, String&gt;();</span><br><span class="line">        redisTemplate.setConnectionFactory(factory);</span><br><span class="line">        redisTemplate.afterPropertiesSet();</span><br><span class="line">        setSerializer(redisTemplate);</span><br><span class="line">        return redisTemplate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">    * 给redisTemplate指定序列化方式</span><br><span class="line">    */</span><br><span class="line">    private void setSerializer(RedisTemplate&lt;String, String&gt; template) &#123;</span><br><span class="line">        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);</span><br><span class="line">        ObjectMapper om = new ObjectMapper();</span><br><span class="line">        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);</span><br><span class="line">        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);</span><br><span class="line">        jackson2JsonRedisSerializer.setObjectMapper(om);</span><br><span class="line">        template.setKeySerializer(new StringRedisSerializer());</span><br><span class="line">        template.setValueSerializer(jackson2JsonRedisSerializer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">    * 指定使用redisCacheManager来做缓存管理</span><br><span class="line">    */</span><br><span class="line">    @Bean</span><br><span class="line">    public CacheManager cacheManager(RedisTemplate redisTemplate) &#123;</span><br><span class="line"></span><br><span class="line">        RedisCacheManager rcm = new RedisCacheManager(redisTemplate);</span><br><span class="line">        // 设置缓存过期时间，秒</span><br><span class="line">        //用法 @Cacheable(value=&quot;12h&quot;,keyGenarator=&quot;keyGenerator&quot;)</span><br><span class="line">        Map&lt;String,Long&gt; expires = new HashMap()&#123;&#123;</span><br><span class="line">           put(&quot;12h&quot;,3600*12L);  //12小时失效</span><br><span class="line">           put(&quot;1h&quot;,3600*1L);    //1小时失效</span><br><span class="line">           put(&quot;10m&quot;,60*10L);     //10分钟失效</span><br><span class="line">           put(&quot;1m&quot;,60L);     //1分钟失效</span><br><span class="line">           put(&quot;10s&quot;,10L);     //10秒失效</span><br><span class="line">        &#125;&#125;;</span><br><span class="line">        rcm.setExpires(expires);</span><br><span class="line">        return rcm;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">    * 自动生成key的方式</span><br><span class="line">    */</span><br><span class="line">    @Bean</span><br><span class="line">    @Override</span><br><span class="line">    public KeyGenerator keyGenerator() &#123;</span><br><span class="line">        return (target, method, objects) -&gt; &#123;</span><br><span class="line">            StringBuilder sb = new StringBuilder();</span><br><span class="line">            sb.append(target.getClass().getName());</span><br><span class="line">            sb.append(&quot;::&quot; + method.getName() + &quot;:&quot;);</span><br><span class="line">            for (Object obj : objects) &#123;</span><br><span class="line">                sb.append(obj.toString());</span><br><span class="line">            &#125;</span><br><span class="line">            return sb.toString();</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="使用redis缓存"><a href="#使用redis缓存" class="headerlink" title="使用redis缓存"></a>使用redis缓存</h2><h3 id="Cacheable"><a href="#Cacheable" class="headerlink" title="@Cacheable"></a>@Cacheable</h3><p>该注解可以标记在方法上也可以标记在类上.在支持Spring Cache的环境下，对于使用@Cacheable标注的方法，Spring在每次执行前都会检查Cache中是否存在相同key的缓存元素，如果存在就不再执行该方法，而是直接从缓存中获取结果进行返回，否则才会执行并将返回结果存入指定的缓存中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Cacheable(value=&quot;users&quot;, key=&quot;#id&quot;)</span><br><span class="line">public User find(Integer id)</span><br></pre></td></tr></table></figure>
+<p><code>@Cacheable</code>有两个属性,value属性表示用什么缓存,key代表缓存数据存入redis时,用什么key。  </p>
+<h4 id="value属性"><a href="#value属性" class="headerlink" title="value属性"></a>value属性</h4><p>value属性是必须指定的，其表示当前方法的返回值是会被缓存在哪个Cache上的，对应Cache的名称。其可以是一个Cache也可以是多个Cache，当需要指定多个Cache时其是一个数组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Cacheable(&quot;cache1&quot;)//Cache是发生在cache1上的</span><br><span class="line">public User find(Integer id) </span><br><span class="line"></span><br><span class="line">@Cacheable(&#123;&quot;cache1&quot;, &quot;cache2&quot;&#125;)//Cache是发生在cache1和cache2上的</span><br><span class="line">public User find(Integer id)</span><br></pre></td></tr></table></figure></p>
+<h4 id="key属性"><a href="#key属性" class="headerlink" title="key属性"></a>key属性</h4><p>key在我们配置keyGenerator后使用该策略生成key，可以使用Spring的EL表达式来指定key。使用方法参数时我们可以直接使用“#参数名”或者“#p参数的index”，来获取参数的值作为key。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Cacheable(value=&quot;users&quot;, key=&quot;#id&quot;)</span><br><span class="line">public User find(Integer id) </span><br><span class="line"></span><br><span class="line">@Cacheable(value=&quot;users&quot;, key=&quot;#p0&quot;)</span><br><span class="line">public User find(Integer id) </span><br><span class="line"></span><br><span class="line">@Cacheable(value=&quot;users&quot;, key=&quot;#user.id&quot;)</span><br><span class="line">public User find(User user)</span><br><span class="line"></span><br><span class="line">@Cacheable(value=&quot;users&quot;, key=&quot;#p0.id&quot;)</span><br><span class="line">public User find(User user)</span><br></pre></td></tr></table></figure>
+<p>除了获取参数来作为Key之外,spring还提供了一个root对象,来获取更多的信息来指定Key值。</p>
+<table>
+<thead>
+<tr>
+<th>属性名称</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>methodName</td>
+<td>当前方法名</td>
+<td>#root.methodName</td>
+</tr>
+<tr>
+<td>method</td>
+<td>当前方法</td>
+<td>#root.method.name</td>
+</tr>
+<tr>
+<td>target</td>
+<td>当前被调用的对象</td>
+<td>#root.target</td>
+</tr>
+<tr>
+<td>targetClass</td>
+<td>当前被调用的对象的class</td>
+<td>#root.targetClass</td>
+</tr>
+<tr>
+<td>args</td>
+<td>当前方法参数组成的数组</td>
+<td>#root.args[0]</td>
+</tr>
+<tr>
+<td>caches</td>
+<td>当前被调用的方法使用的Cache</td>
+<td>#root.caches[0].name</td>
+</tr>
+</tbody>
+</table>
+<p>使用时,可以将root省略。</p>
+<h4 id="condition属性"><a href="#condition属性" class="headerlink" title="condition属性"></a>condition属性</h4><p>有时候我们可能希望一个方法只在某些情况下才缓存数据时,我们就可以使用condition属性来指定条件。  </p>
+<p>其值是通过SpringEL表达式来指定的，当为true时表示进行缓存处理；当为false时表示不进行缓存处理，即每次调用该方法时该方法都会执行一次。如下示例表示只有当user的id为偶数时才会进行缓存。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Cacheable(value=&#123;&quot;users&quot;&#125;, key=&quot;#user.id&quot;, condition=&quot;#user.id%2==0&quot;)</span><br><span class="line">public User find(User user)</span><br></pre></td></tr></table></figure></p>
+<h3 id="CachePut"><a href="#CachePut" class="headerlink" title="@CachePut"></a>@CachePut</h3><p>该注解同样可以标记在类和方法上，<code>@CachePut</code>一般用与修改的方法上,标记了该注解的方法,在被调用时,不会去缓存查询数据,而是每次都会执行该方法,并且将该方法的返回值放入到缓存中。可以理解为每次都更新该Key的缓存。  </p>
+<p><code>@CachePut</code>的参数和<code>@Cacheable</code>的参数一致,同样可以用上面的方法来指定Key。</p>
+<h3 id="CacheEvict"><a href="#CacheEvict" class="headerlink" title="@CacheEvict"></a>@CacheEvict</h3><p>该注解同样可以标记类和方法上，当标记该注解时，表明执行该方法时，会删除指定缓存中指定key值的缓存。  </p>
+<p>该注解同样有value和key属性;value表示清除操作是发生在哪些Cache上的（对应Cache的名称）;key表示需要清除的是哪个key。</p>
+<h4 id="allEntries属性"><a href="#allEntries属性" class="headerlink" title="allEntries属性"></a>allEntries属性</h4><p>allEntries是boolean类型，表示是否需要清除缓存中的所有元素。默认为false，表示不需要。  </p>
+<p>当指定了allEntries为true时，Spring Cache将忽略指定的key。有的时候我们需要Cache一下清除所有的元素，这比一个一个清除元素更有效率。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@CacheEvict(value=&quot;users&quot;, allEntries=true)</span><br><span class="line">public void delete(Integer id)</span><br></pre></td></tr></table></figure></p>
+<h4 id="beforeInvocation属性"><a href="#beforeInvocation属性" class="headerlink" title="beforeInvocation属性"></a>beforeInvocation属性</h4><p>清除操作默认是在对应方法成功执行之后触发的，即方法如果因为抛出异常而未能成功返回时也不会触发清除操作。  </p>
+<p>使用beforeInvocation可以改变触发清除操作的时间，当我们指定该属性值为true时，Spring会在调用该方法之前清除缓存中的指定元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@CacheEvict(value=&quot;users&quot;, beforeInvocation=true)</span><br><span class="line">public void delete(Integer id)</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://www.cnblogs.com/fashflying/p/6908028.html" target="_blank" rel="noopener">参考博客</a></p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/myBlogs/2018/07/11/Scrapy爬虫入门/" data-toggle="tooltip" data-placement="top"
+                           title="Scrapy爬虫入门">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!--友言评论框-->
+                
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+                
+                
+                <div class="comment"></div>
+                <script>
+                    new Valine({
+                        // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+                        av: AV, 
+                        el: '.comment', // 
+                        app_id: 'pDX4cMkVAP7E096e9hemfGVP-gzGzoHsz', // 这里填写上面得到的APP ID
+                        app_key: 'XkcDkuJ6A4UWvRl8slXVICDm', // 这里填写上面得到的APP KEY
+                        placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+                    });
+                </script>
+                
+
+                <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                    <!-- Featured Tags -->
+                    
+                    <section>
+                        <!-- no hr -->
+                        <h5 class="text-center">
+                            <a href="/myBlogs/tags/">FEATURED TAGS</a>
+                        </h5>
+                        <div class="tags">
+                            
+                            <a class="tag" href="/myBlogs/Tags/#spring boot"
+                               title="spring boot">spring boot</a>
+                            
+                            <a class="tag" href="/myBlogs/Tags/#redis"
+                               title="redis">redis</a>
+                            
+                        </div>
+                    </section>
+                    
+
+                    <!-- Friends Blog -->
+                    
+                    <div style="margin-top: 20px;">
+                        <h5 class="text-center">FRIENDS</h5>
+                        <ul class="list-inline text-center">
+                            
+                            <li><a href="http://wangxuanbo.gitee.io/blog/">波波</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/chiangchou/">chiangchou</a></li>
+                            
+                            <li><a href="https://home.cnblogs.com/u/jiaqingshareing/">jiaqing</a></li>
+                            
+                            <li><a href="http://xiezixi.gitee.io/blog/">西瓜皮</a></li>
+                            
+                            <li><a href="http://konnga.coding.me">网嘉乘</a></li>
+                            
+                            <li><a href="http://66.112.217.159:9000/">xinQing</a></li>
+                            
+                        </ul>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <!--目录-->
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置redis缓存"><span class="toc-text">配置redis缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用redis缓存"><span class="toc-text">使用redis缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cacheable"><span class="toc-text">@Cacheable</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#value属性"><span class="toc-text">value属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#key属性"><span class="toc-text">key属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#condition属性"><span class="toc-text">condition属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CachePut"><span class="toc-text">@CachePut</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CacheEvict"><span class="toc-text">@CacheEvict</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#allEntries属性"><span class="toc-text">allEntries属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#beforeInvocation属性"><span class="toc-text">beforeInvocation属性</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/yoyoig">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Yoyoig 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/myBlogs/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/myBlogs/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/myBlogs/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://mingke_yan.gitee.io/myBlogs/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = '9714659624b7b380bb842c081a38bb19';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://p5ioqsms3.bkt.clouddn.com/avtor.jpg">
+</body>
+
+</html>
